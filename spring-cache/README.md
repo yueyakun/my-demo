@@ -419,7 +419,7 @@ public void testUserCache() throws Exception {  
 4. 运行结果如下图
 
 
-![](https://github.com/yueyakun2017/my-demo/blob/main/spring-cache/2020-10-20-spring-cache-1.png)
+![](https://github.com/yueyakun2017/my-demo/blob/main/spring-cache/2020-10-20-spring-cache-2.png)
 
 从运行结果可以看出
 
