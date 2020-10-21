@@ -1,0 +1,13 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: spring-cache
+
+
+logging:
+  level:
+    org:
+      springframework:
+        security: info
