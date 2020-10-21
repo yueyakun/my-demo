@@ -320,7 +320,7 @@ public class UserCacheTests {
 
 6. 启动测试类，运行结果如下图
 
-![](/2020-10-20-spring-cache-1.png)
+![](https://github.com/yueyakun2017/my-demo/blob/main/spring-cache/2020-10-20-spring-cache-1.png)
 
 从运行结果可以看出
 
@@ -419,7 +419,7 @@ public void testUserCache() throws Exception {  
 4. 运行结果如下图
 
 
-![](/2020-10-20-spring-cache-2.png)
+![](https://github.com/yueyakun2017/my-demo/blob/main/spring-cache/2020-10-20-spring-cache-1.png)
 
 从运行结果可以看出
 
