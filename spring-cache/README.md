@@ -435,7 +435,7 @@ public void testUserCache() throws Exception {  
     
 ## 总结
 
-在项目中引入 Spring Cache 可以帮助我们很方便的实现缓存开发，再加上 Caffeine 的加持，轻松实现高性能单机缓存。测试代码已上[GitHub](https://github.com/yueyakun2017/my-demo)
+在项目中引入 Spring Cache 可以帮助我们很方便的实现缓存开发，再加上 Caffeine 的加持，轻松实现高性能单机缓存。测试代码已上传 [GitHub](https://github.com/yueyakun2017/my-demo)。
 
 另外再补充一点 SPEL 的知识，方便定义缓存的 key 和 condition 时查看。
 
