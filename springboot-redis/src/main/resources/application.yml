@@ -1,0 +1,32 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: redis-distributed-com
+
+  redis:
+    host:
+    port:
+    password:
+    database: 0
+    timeout: 3000
+    jedis:
+      pool:
+        max-active: 8
+        max-idle: 8
+        min-idle: 0
+        max-wait: -1
+#    lettuce:
+#      pool:
+#        max-active: 8
+#        max-wait: 1
+#        max-idle: 8
+#        min-idle: 0
+
+
+logging:
+  level:
+    org:
+      springframework:
+        security: info
