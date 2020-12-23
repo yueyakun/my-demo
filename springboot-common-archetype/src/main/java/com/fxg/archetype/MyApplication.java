@@ -32,17 +32,19 @@ public class MyApplication {
 		String os = System.getProperty("os.name").toLowerCase();
 		if (os.contains(WINDOWS)) {
 			// 开发环境配置文件位置，优先级比类路径下的高
-			String userDir = System.getProperty("user.dir");
-			String devPath = userDir + "\\config\\application.yml";
+			String userDir = System.getProperty("user.home");//系统用户目录
+//			String userDir = System.getProperty("user.dir");//项目所在目录
+			String devPath = userDir + "\\my-localhost-config-center\\springboot-common-archetype\\application.yml";
 			devPath = "file:" + devPath.substring(devPath.indexOf(":") + 1).replaceAll("\\\\", "/");
 			configFilesPath = String.join(",", configFilesPath, devPath);
 		} else {
 			// 生产环境配置文件位置，优先级比类路径下的高
-			String prodPath = "file:/web-service/house-service/application.yml";
+			String prodPath = "file:/web-service/archetype/application.yml";//此demo项目没必要配
 			configFilesPath = String.join(",", configFilesPath, prodPath);
 		}
 		System.setProperty(CONFIG_FILES_PATH, configFilesPath);
 		SpringApplication.run(MyApplication.class, "--spring.config.location=" + configFilesPath);
+
 	}
 
 }

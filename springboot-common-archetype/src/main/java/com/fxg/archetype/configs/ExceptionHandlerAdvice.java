@@ -49,7 +49,7 @@ public class ExceptionHandlerAdvice {
 
 		ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
 		HttpServletRequest request = attributes.getRequest();
-		ExceptionDescriptor descriptor = ExceptionDescriptor.newFromExeption(ex, this.applicationName, this.ipAddress, request.getRequestURI(), null);
+		ExceptionDescriptor descriptor = ExceptionDescriptor.newFromException(ex, this.applicationName, this.ipAddress, request.getRequestURI(), null);
 		return descriptor;
 	}
 

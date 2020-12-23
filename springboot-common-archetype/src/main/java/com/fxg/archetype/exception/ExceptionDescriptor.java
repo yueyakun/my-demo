@@ -73,7 +73,7 @@ public class ExceptionDescriptor {
         this.info = info;
     }
 
-    public static ExceptionDescriptor newFromExeption(Exception ex,String serviceName,String ipAddress,String url,String info) {
+    public static ExceptionDescriptor newFromException(Exception ex,String serviceName,String ipAddress,String url,String info) {
 
         ExceptionDescriptor descriptor = new ExceptionDescriptor();
         descriptor.setServiceName(serviceName);
