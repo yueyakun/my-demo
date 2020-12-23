@@ -6,7 +6,7 @@
 
     <resultMap id="userMap" type="com.fxg.archetype.domain.User">
         <id column="id" jdbcType="BIGINT" property="id" />
-        <result column="g"></result>
+        <result column="gender" jdbcType="int" typeHandler="com.fxg.archetype.configs.MyEnumTypeHandler"></result>
     </resultMap>
 
 

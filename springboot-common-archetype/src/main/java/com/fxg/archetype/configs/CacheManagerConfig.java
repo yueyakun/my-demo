@@ -5,7 +5,6 @@ package com.fxg.archetype.configs;
 import com.github.benmanes.caffeine.cache.Caffeine;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.cache.caffeine.CaffeineCacheManager;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -16,7 +15,6 @@ import java.util.concurrent.TimeUnit;
 /**
  * 配置本地缓存，使用 Caffeine Cache
  */
-@EnableCaching()
 @Configuration
 public class CacheManagerConfig {
 

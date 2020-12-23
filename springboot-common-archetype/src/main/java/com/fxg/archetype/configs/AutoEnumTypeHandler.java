@@ -16,8 +16,9 @@ import java.sql.SQLException;
  * 我们一般都会自定义枚举类型，一般也会自定义枚举和数据库字段类型的映射（默认的是把枚举的名字映射成char类型），
  * 所以这里根据是不是我们自定义的枚举类型决定用默认的还是用我们自定义的枚举转换器
  *
- * 这个自定义的枚举转换器可以在 application.yml 配置文件中配置，也可以在 mapper.xml 中的 <result></result>
- * 中配置，还可以在 mybatis 配置文件的 <typeHandlers></typeHandlers> 中配置，被项目在 application.yml 中配置
+ * 这个自定义的枚举转换器可以在 application.yml 配置文件中配置，
+ * 也可以在 mapper.xml 中的 <result></result>中配置，
+ * 还可以在 mybatis 配置文件的 <typeHandlers></typeHandlers> 中配置。
  * @param <E>
  */
 public class AutoEnumTypeHandler<E extends Enum<E>> extends BaseTypeHandler<E> {
