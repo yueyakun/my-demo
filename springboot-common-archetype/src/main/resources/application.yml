@@ -52,3 +52,11 @@ logging:
         security: info
 
 
+rsa:
+  encrypt:
+    open: true # 是否开启加密 true  or  false
+    showLog: true # 是否打印加解密log true  or  false
+    timestampCheck: true # 是否开启时间戳检查 ture or false
+    publicKey: MFwwDQYJKoZIhvcNAQEBBQADSwAwSAJBAM9E/1y69INmPhBBjZ6MGATDRp+NIqWkRNwpVOKtiqZcchOU6i7M/y3HDL8n03lpTFSjTA0cuU5jfE+l+kiFVIsCAwEAAQ==
+
+    privateKey: MIIBVwIBADANBgkqhkiG9w0BAQEFAASCAUEwggE9AgEAAkEAz0T/XLr0g2Y+EEGNnowYBMNGn40ipaRE3ClU4q2KplxyE5TqLsz/LccMvyfTeWlMVKNMDRy5TmN8T6X6SIVUiwIDAQABAkEAhzzExbNyYN3wNtke10kfTtQ/G1GSPrO8/k21hiWnZr2UHeU97NYyP3+2ct49iAjguQrpG9bsw4AjoSuQgnQPaQIhAO8q6jfw8Kl4A/ZRpLyDKkRGyT1ZFw1LncFfiN32MSgHAiEA3dtfv8DYJ9E6xPHHjUtsZo4/AV2/J/z4x1EUhYPRZl0CIQCgTwufY4hsj11YhXD+SozSJwBMdqLU7pJXQ0niPVrFkQIhAKSv+Ra1x39fMJoLxI8dYv2KMDkKZyD/B4mlpW8rF+E9AiEAwSKOXJoUaRGb02/syD2JjneUbiQdWAajJxyrU7vb6g0=

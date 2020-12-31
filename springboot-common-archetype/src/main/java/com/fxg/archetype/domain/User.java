@@ -236,4 +236,14 @@ public class User implements Serializable {
 	public void setLastTime(LocalDateTime lastTime) {
 		this.lastTime = lastTime;
 	}
+
+	@Override
+	public String toString() {
+		return "User{" + "id=" + id + ", username='" + username + '\'' + ", password='" + password + '\''
+				+ ", nickName='" + nickName + '\'' + ", mobile='" + mobile + '\'' + ", gender=" + gender + ", openId='"
+				+ openId + '\'' + ", unionId='" + unionId + '\'' + ", email='" + email + '\'' + ", maskedMobile='"
+				+ maskedMobile + '\'' + ", maskedEmail='" + maskedEmail + '\'' + ", pictureId=" + pictureId
+				+ ", birthday=" + birthday + ", version=" + version + ", enabled=" + enabled + ", enabledId="
+				+ enabledId + ", createTime=" + createTime + ", lastTime=" + lastTime + '}';
+	}
 }

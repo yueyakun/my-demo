@@ -1,5 +1,7 @@
 package com.fxg.archetype.controller;
 
+import cn.shuibo.annotation.Decrypt;
+import cn.shuibo.annotation.Encrypt;
 import com.fxg.archetype.api.HttpResult;
 import com.fxg.archetype.api.HttpStatus;
 import com.fxg.archetype.domain.User;
@@ -7,10 +9,7 @@ import com.fxg.archetype.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * 测试
@@ -28,8 +27,24 @@ public class UserController {
 	/**
 	 * 查询初始化记录
 	 */
-	@GetMapping("/selectByName")
+	@Encrypt
+	@PostMapping(value = "/selectByName")
 	public HttpResult<User> selectByName(@RequestParam String name) {
-		return new HttpResult<>(HttpStatus.OK, "ok", userService.selectByName(name));
+		User user = new User();
+		user.setId(1);
+		user.setNickName("小灰灰");
+		user.setUsername("summer");
+		return new HttpResult<>(HttpStatus.OK, "ok", user);
+	}
+
+	/**
+	 * 查询初始化记录
+	 */
+	@Decrypt(required = true)
+	@PostMapping(value = "/add")
+	public HttpResult<User> add(@RequestBody User user) {
+
+		logger.info(user.toString());
+		return new HttpResult<>(HttpStatus.OK, "ok", user);
 	}
 }
