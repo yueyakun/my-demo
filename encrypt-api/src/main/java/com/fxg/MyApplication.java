@@ -3,19 +3,11 @@ package com.fxg;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
-import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
-import org.springframework.scheduling.annotation.EnableAsync;
-import org.springframework.scheduling.annotation.EnableScheduling;
-import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 
-@EnableAsync
-@EnableScheduling
-@EnableCaching
 @SpringBootApplication
 @EnableAspectJAutoProxy
-@EnableTransactionManagement
 @EnableConfigurationProperties
 public class MyApplication {
 
@@ -35,7 +27,7 @@ public class MyApplication {
 		if (os.contains(WINDOWS)) {
 			// 开发环境配置文件位置，优先级比类路径下的高
 			String userDir = System.getProperty("user.home");//系统用户目录
-//			String userDir = System.getProperty("user.dir");//项目所在目录
+			//			String userDir = System.getProperty("user.dir");//项目所在目录
 			String devPath = userDir + "\\my-localhost-config-center\\encrypt-api\\application.yml";
 			devPath = "file:" + devPath.substring(devPath.indexOf(":") + 1).replaceAll("\\\\", "/");
 			configFilesPath = String.join(",", configFilesPath, devPath);

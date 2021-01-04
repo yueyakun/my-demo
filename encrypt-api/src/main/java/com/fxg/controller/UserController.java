@@ -3,12 +3,11 @@ package com.fxg.controller;
 import com.fxg.api.HttpResult;
 import com.fxg.api.HttpStatus;
 import com.fxg.domain.User;
-import com.fxg.enums.Gender;
+import com.fxg.encrypt.annotation.Decrypt;
+import com.fxg.encrypt.annotation.Encrypt;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.*;
-
-import java.time.LocalDate;
 
 /**
  * 测试
@@ -23,15 +22,24 @@ public class UserController {
 	/**
 	 * 查询初始化记录
 	 */
-	@PostMapping("/selectByName")
-	public HttpResult<User> receiveEncryptBody(@RequestBody User data) {
-
-		logger.info("receive data:{}",data);
+	@Encrypt
+	@PostMapping(value = "/selectByName")
+	public HttpResult<User> selectByName(@RequestParam String name) {
 		User user = new User();
-		user.setNickName("xiaohuihui");
-		user.setGender(Gender.MALE);
-		user.setBirthday(LocalDate.now());
-		user.setId(100);
+		user.setId(1);
+		user.setNickName("小灰灰");
+		user.setUsername("summer");
+		return new HttpResult<>(HttpStatus.OK, "ok", user);
+	}
+
+	/**
+	 * 查询初始化记录
+	 */
+	@Decrypt(required = true)
+	@PostMapping(value = "/add")
+	public HttpResult<User> add(@RequestBody User user) {
+
+		logger.info(user.toString());
 		return new HttpResult<>(HttpStatus.OK, "ok", user);
 	}
 }
