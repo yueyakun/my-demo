@@ -20,6 +20,12 @@ public class JsonUtils {
         return jsonNode.get(key);
     }
 
+	public static JsonNode getNode(Object obj, String key) throws IOException {
+		String content = OBJECT_MAPPER.writeValueAsString(obj);
+		JsonNode jsonNode = OBJECT_MAPPER.readTree(content);
+		return jsonNode.get(key);
+	}
+
     public static String writeValueAsString(Object body) throws JsonProcessingException {
         return OBJECT_MAPPER.writeValueAsString(body);
     }

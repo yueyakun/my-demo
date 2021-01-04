@@ -16,7 +16,7 @@ public class SecretKeyConfig {
 
     private boolean open = true;
 
-    private boolean showLog = false;
+    private boolean showLog = true;
 
     /**
      * 请求数据时间戳校验时间差

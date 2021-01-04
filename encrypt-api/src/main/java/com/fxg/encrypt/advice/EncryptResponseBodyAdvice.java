@@ -1,5 +1,6 @@
 package com.fxg.encrypt.advice;
 
+import com.fxg.api.HttpResult;
 import com.fxg.configs.SecretKeyConfig;
 import com.fxg.encrypt.annotation.Encrypt;
 import com.fxg.util.Base64Util;
@@ -21,7 +22,7 @@ import java.lang.reflect.Method;
 import java.util.Objects;
 
 @ControllerAdvice
-public class EncryptResponseBodyAdvice implements ResponseBodyAdvice<Object> {
+public class EncryptResponseBodyAdvice implements ResponseBodyAdvice<HttpResult<Object>> {
 
 	private Logger log = LoggerFactory.getLogger(this.getClass());
 
@@ -43,9 +44,9 @@ public class EncryptResponseBodyAdvice implements ResponseBodyAdvice<Object> {
 	}
 
 	@Override
-	public Object beforeBodyWrite(Object body, MethodParameter returnType, MediaType selectedContentType,
-			Class<? extends HttpMessageConverter<?>> selectedConverterType, ServerHttpRequest request,
-			ServerHttpResponse response) {
+	public HttpResult<Object> beforeBodyWrite(HttpResult<Object> body, MethodParameter returnType,
+			MediaType selectedContentType, Class<? extends HttpMessageConverter<?>> selectedConverterType,
+			ServerHttpRequest request, ServerHttpResponse response) {
 		// EncryptResponseBodyAdvice.setEncryptStatus(false);
 		// Dynamic Settings Not Encrypted
 		Boolean status = encryptLocal.get();
@@ -54,24 +55,36 @@ public class EncryptResponseBodyAdvice implements ResponseBodyAdvice<Object> {
 			return body;
 		}
 		if (encrypt) {
-			String publicKey = secretKeyConfig.getPublicKey();
-			try {
-				String content = JsonUtils.writeValueAsString(body);
-				if (!StringUtils.hasText(publicKey)) {
-					throw new NullPointerException("Please configure rsa.encrypt.privateKey parameter!");
-				}
-				byte[] data = content.getBytes();
-				byte[] encodedData = RSAUtil.encrypt(data, publicKey);
-				String result = Base64Util.encode(encodedData);
-				if (secretKeyConfig.isShowLog()) {
-					log.info("Pre-encrypted data：{}，After encryption：{}", content, result);
-				}
+			HttpResult<Object> result = encryptBody(body);
+			if (result != null)
 				return result;
-			} catch (Exception e) {
-				log.error("Encrypted data exception", e);
-			}
 		}
 
 		return body;
+	}
+
+	private HttpResult<Object> encryptBody(HttpResult<Object> body) {
+
+		String publicKey = secretKeyConfig.getPublicKey();
+		try {
+			//取出data
+			Object data = body.getData();
+			// TODO: 2021/1/4 设置加密标志
+			String content = JsonUtils.writeValueAsString(data);
+			if (!StringUtils.hasText(publicKey)) {
+				throw new NullPointerException("Please configure rsa.encrypt.privateKey parameter!");
+			}
+			byte[] ByteData = content.getBytes();
+			byte[] encodedData = RSAUtil.encrypt(ByteData, publicKey);
+			String result = Base64Util.encode(encodedData);
+			if (secretKeyConfig.isShowLog()) {
+				log.info("Pre-encrypted data：{}，After encryption：{}", content, result);
+			}
+			body.setData(result);
+			return body;
+		} catch (Exception e) {
+			log.error("Encrypted data exception", e);
+		}
+		return null;
 	}
 }
