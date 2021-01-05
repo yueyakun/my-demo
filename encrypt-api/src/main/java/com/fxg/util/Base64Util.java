@@ -2,11 +2,6 @@ package com.fxg.util;
 
 import org.springframework.util.Base64Utils;
 
-/**
- * Base64
- * Author:Bobby
- * DateTime:2019/4/9
- **/
 public class Base64Util {
 
 	/**
@@ -16,9 +11,10 @@ public class Base64Util {
 	 * @return byte
 	 * @throws Exception Exception
 	 */
-	public static byte[] decode(String base64) throws Exception {
+	public static byte[] decode(String base64) {
 		return Base64Utils.decodeFromString(base64);
 	}
+
 
 	/**
 	 * Binary encoding as a string
@@ -27,7 +23,18 @@ public class Base64Util {
 	 * @return String
 	 * @throws Exception Exception
 	 */
-	public static String encode(byte[] bytes) throws Exception {
+	public static String encode(byte[] bytes) {
 		return new String(Base64Utils.encode(bytes));
+	}
+
+
+	/**
+	 * String encoding as a string
+	 * @param str
+	 * @return
+	 * @throws Exception
+	 */
+	public static String encode(String str) {
+		return new String(Base64Utils.encode(str.getBytes()));
 	}
 }
