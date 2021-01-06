@@ -4,7 +4,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 
-@Configuration
+//@Configuration
 @ConfigurationProperties(prefix = "rsa.encrypt")
 public class SecretKeyConfig {
 
@@ -18,11 +18,13 @@ public class SecretKeyConfig {
 
     private boolean showLog = true;
 
+    private boolean preventReplay = true;
+
     /**
      * 请求数据时间戳校验时间差
      * 超过指定时间的数据认定为伪造
      */
-    private boolean timestampCheck = false;
+    private boolean timestampCheck = false;// TODO: 2021/1/6 删除
 
     public String getPrivateKey() {
         return privateKey;
@@ -71,4 +73,12 @@ public class SecretKeyConfig {
     public void setTimestampCheck(boolean timestampCheck) {
         this.timestampCheck = timestampCheck;
     }
+
+	public boolean isPreventReplay() {
+		return preventReplay;
+	}
+
+	public void setPreventReplay(boolean preventReplay) {
+		this.preventReplay = preventReplay;
+	}
 }
