@@ -37,13 +37,13 @@ public class MD5Util {
 	 * <p>
 	 * 按参数名称升序，将参数值进行连接 签名
 	 *
-	 * @param appSecret
+	 * @param secretKey
 	 * @param params
 	 * @return
 	 */
-	public static String sign(String appSecret, TreeMap<String, String> params) {
+	public static String sign(String secretKey, TreeMap<String, String> params) {
 		StringBuilder paramValues = new StringBuilder();
-		params.put("appSecret", appSecret);
+		params.put("secretKey", secretKey);
 
 		for (Map.Entry<String, String> entry : params.entrySet()) {
 			paramValues.append(entry.getValue());
@@ -56,12 +56,12 @@ public class MD5Util {
 	/**
 	 * 请求参数签名验证
 	 *
-	 * @param appSecret
+	 * @param secretKey
 	 * @param request
 	 * @return true 验证通过 false 验证失败
 	 * @throws Exception
 	 */
-	public static boolean verifySign(String appSecret, HttpServletRequest request) throws Exception {
+	public static boolean verifySign(String secretKey, HttpServletRequest request) throws Exception {
 		TreeMap<String, String> params = new TreeMap<String, String>();
 
 		String signStr = request.getHeader("SIGN");
@@ -75,7 +75,7 @@ public class MD5Util {
 			params.put(paramName, URLDecoder.decode(request.getParameter(paramName), "UTF-8"));
 		}
 
-		if (sign(appSecret, params).equals(signStr)) {
+		if (sign(secretKey, params).equals(signStr)) {
 			return true;
 		}
 		return false;

@@ -34,6 +34,11 @@ public final class HttpStatus {
    */
   public static final int NOT_EXIST = 404;
 
+	/**
+	 * {@code 405 签名验证失败}
+	 */
+	public static final int SIGN_FAILED = 405;
+
   /**
    * {@code 500 系统内部错}
    */
@@ -63,5 +68,5 @@ public final class HttpStatus {
    * {@code 604 用户状态失效}
    */
   public static final int USER_DISABLE = 604;
-  
+
 }
