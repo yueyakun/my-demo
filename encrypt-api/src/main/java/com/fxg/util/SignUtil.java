@@ -3,22 +3,22 @@ package com.fxg.util;
 import org.springframework.util.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
-import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Enumeration;
 import java.util.Map;
 import java.util.TreeMap;
 
-public class MD5Util {
+public class SignUtil {
+
+	private static String MD5 = "MD5";
 
 	public static String md5(String string) {
 		byte[] hash;
 		try {
-			hash = MessageDigest.getInstance("MD5").digest(string.getBytes("UTF-8"));
-		} catch (UnsupportedEncodingException e) {
-			throw new RuntimeException("UTF-8 is unsupported", e);
+			hash = MessageDigest.getInstance(MD5).digest(string.getBytes(StandardCharsets.UTF_8));
 		} catch (NoSuchAlgorithmException e) {
 			throw new RuntimeException("MessageDigest不支持MD5Util", e);
 		}
@@ -53,13 +53,14 @@ public class MD5Util {
 	/**
 	 * 请求参数签名验证
 	 *
-	 * @param aesKey
-	 * @param request
-	 * @return true 验证通过 false 验证失败
+	 * @param aesKey 用rsa私钥解密得到的aes秘钥
+	 * @param timestamp 时间戳
+	 * @param nonce 随机数
+	 * @param request HttpServletRequest
+	 * @return true 验签成功 false 验签失败
 	 * @throws Exception
 	 */
-	public static boolean verifySign(String aesKey, String timestamp, String nonce, HttpServletRequest request)
-			throws Exception {
+	public static boolean verifySign(String aesKey, String timestamp, String nonce, HttpServletRequest request) throws Exception {
 		TreeMap<String, String> params = new TreeMap<>();
 		params.put("timestamp", timestamp);
 		params.put("aesKey", aesKey);

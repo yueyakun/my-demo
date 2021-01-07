@@ -35,9 +35,14 @@ public final class HttpStatus {
   public static final int NOT_EXIST = 404;
 
 	/**
-	 * {@code 405 签名验证失败}
+	 * {@code 418 签名验证失败}
 	 */
-	public static final int SIGN_FAILED = 405;
+	public static final int SIGN_FAILED = 418;
+
+	/**
+	 * {@code 405 过期的请求}
+	 */
+	public static final int  TOO_EARLY = 425;
 
   /**
    * {@code 500 系统内部错}

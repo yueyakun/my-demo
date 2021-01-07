@@ -2,7 +2,7 @@ package com.fxg.encrypt.interceptor;
 
 import com.fxg.api.HttpStatus;
 import com.fxg.configs.SecretKeyConfig;
-import com.fxg.util.MD5Util;
+import com.fxg.util.SignUtil;
 import com.fxg.util.RSAUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -42,9 +42,11 @@ public class SignInterceptor implements HandlerInterceptor {
 				|| StringUtils.isEmpty(nonce)) {
 			logger.warn(VERIFY_FAIL_MSG, "sing parameters are missing");
 			response.setStatus(HttpStatus.SIGN_FAILED);
+			return false;
 		}
 
 		//校验时间戳
+		// TODO: 2021/1/7
 
 		//校验时间戳加随机数，防止重放攻击
 
@@ -52,7 +54,7 @@ public class SignInterceptor implements HandlerInterceptor {
 		byte[] aesKey = RSAUtil.decrypt(encryptedAesKey.getBytes(StandardCharsets.UTF_8),
 				secretKeyConfig.getPrivateKey());
 		//验证签名
-		boolean right = MD5Util.verifySign(new String(aesKey, StandardCharsets.UTF_8), timestamp, nonce, request);
+		boolean right = SignUtil.verifySign(new String(aesKey, StandardCharsets.UTF_8), timestamp, nonce, request);
 		if (right) {
 			return true;
 		}
