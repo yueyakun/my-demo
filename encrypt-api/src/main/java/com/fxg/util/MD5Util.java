@@ -37,18 +37,15 @@ public class MD5Util {
 	 * <p>
 	 * 按参数名称升序，将参数值进行连接 签名
 	 *
-	 * @param secretKey
 	 * @param params
 	 * @return
 	 */
-	public static String sign(String secretKey, TreeMap<String, String> params) {
+	public static String sign(TreeMap<String, String> params) {
 		StringBuilder paramValues = new StringBuilder();
-		params.put("secretKey", secretKey);
 
 		for (Map.Entry<String, String> entry : params.entrySet()) {
 			paramValues.append(entry.getValue());
 		}
-		System.out.println(md5(paramValues.toString()));
 		return md5(paramValues.toString());
 	}
 
@@ -56,26 +53,31 @@ public class MD5Util {
 	/**
 	 * 请求参数签名验证
 	 *
-	 * @param secretKey
+	 * @param aesKey
 	 * @param request
 	 * @return true 验证通过 false 验证失败
 	 * @throws Exception
 	 */
-	public static boolean verifySign(String secretKey, HttpServletRequest request) throws Exception {
-		TreeMap<String, String> params = new TreeMap<String, String>();
+	public static boolean verifySign(String aesKey, String timestamp, String nonce, HttpServletRequest request)
+			throws Exception {
+		TreeMap<String, String> params = new TreeMap<>();
+		params.put("timestamp", timestamp);
+		params.put("aesKey", aesKey);
+		params.put("nonce", nonce);
 
-		String signStr = request.getHeader("SIGN");
+		//取出请求头中的签名
+		String signStr = request.getHeader("X_SIGN");
 		if (StringUtils.isEmpty(signStr)) {
 			throw new RuntimeException("There is no SIGN field in the request header!");
 		}
-
+		//读取参数存入 treeMap
 		Enumeration<String> enu = request.getParameterNames();
 		while (enu.hasMoreElements()) {
 			String paramName = enu.nextElement().trim();
 			params.put(paramName, URLDecoder.decode(request.getParameter(paramName), "UTF-8"));
 		}
-
-		if (sign(secretKey, params).equals(signStr)) {
+		//验证签名
+		if (sign(params).equals(signStr)) {
 			return true;
 		}
 		return false;

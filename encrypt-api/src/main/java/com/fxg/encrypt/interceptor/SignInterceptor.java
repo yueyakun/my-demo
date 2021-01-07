@@ -13,6 +13,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.nio.charset.StandardCharsets;
 
 public class SignInterceptor implements HandlerInterceptor {
 
@@ -35,10 +36,11 @@ public class SignInterceptor implements HandlerInterceptor {
 		// aes时间戳
 		String timestamp = request.getHeader("X_TIMESTAMP");
 		// aes随机数
-		String nonce  = request.getHeader("X_NONCE");
+		String nonce = request.getHeader("X_NONCE");
 
-		if (StringUtils.isEmpty(signStr)||StringUtils.isEmpty(encryptedAesKey)||StringUtils.isEmpty(timestamp)||StringUtils.isEmpty(nonce)||){
-			logger.warn(VERIFY_FAIL_MSG,"sing parameters are missing");
+		if (StringUtils.isEmpty(signStr) || StringUtils.isEmpty(encryptedAesKey) || StringUtils.isEmpty(timestamp)
+				|| StringUtils.isEmpty(nonce)) {
+			logger.warn(VERIFY_FAIL_MSG, "sing parameters are missing");
 			response.setStatus(HttpStatus.SIGN_FAILED);
 		}
 
@@ -47,16 +49,15 @@ public class SignInterceptor implements HandlerInterceptor {
 		//校验时间戳加随机数，防止重放攻击
 
 		//解密aes秘钥
-		byte[] decrypt = RSAUtil.decrypt(encryptedAesKey.getBytes("utf-8"), secretKeyConfig.getPrivateKey());
+		byte[] aesKey = RSAUtil.decrypt(encryptedAesKey.getBytes(StandardCharsets.UTF_8),
+				secretKeyConfig.getPrivateKey());
 		//验证签名
-		boolean right = MD5Util.verifySign(channel.getEncryptKey(), request);
+		boolean right = MD5Util.verifySign(new String(aesKey, StandardCharsets.UTF_8), timestamp, nonce, request);
 		if (right) {
 			return true;
 		}
-
 		logger.warn(VERIFY_FAIL_MSG);
-		response.setStatus(HttpStatus.SC_FORBIDDEN);
-
+		response.setStatus(HttpStatus.SIGN_FAILED);
 		return false;
 	}
 
