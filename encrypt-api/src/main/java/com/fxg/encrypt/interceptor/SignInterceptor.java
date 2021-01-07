@@ -2,9 +2,10 @@ package com.fxg.encrypt.interceptor;
 
 import com.fxg.api.HttpStatus;
 import com.fxg.configs.SecretKeyConfig;
+import com.fxg.filter.RequestWrapper;
 import com.fxg.util.Base64Util;
-import com.fxg.util.SignUtil;
 import com.fxg.util.RSAUtil;
+import com.fxg.util.SignUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,18 +30,21 @@ public class SignInterceptor implements HandlerInterceptor {
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
 			throws Exception {
+		RequestWrapper requestWrapper;
 
-		// 签名
-		String signStr = request.getHeader("X_SIGN");
-		// aes秘钥
-		String encryptedAesKey = request.getHeader("X_EAK");
+		if (request instanceof RequestWrapper) {
+			requestWrapper = (RequestWrapper) request;
+		} else {
+			requestWrapper = new RequestWrapper(request);
+		}
+
+
 		// aes时间戳
 		String timestamp = request.getHeader("X_TIMESTAMP");
 		// aes随机数
 		String nonce = request.getHeader("X_NONCE");
 
-		if (StringUtils.isEmpty(signStr) || StringUtils.isEmpty(encryptedAesKey) || StringUtils.isEmpty(timestamp)
-				|| StringUtils.isEmpty(nonce)) {
+		if (StringUtils.isEmpty(timestamp) || StringUtils.isEmpty(nonce)) {
 			logger.warn(VERIFY_FAIL_MSG, "sing parameters are missing");
 			response.setStatus(HttpStatus.SIGN_FAILED);
 			return false;
@@ -51,12 +55,8 @@ public class SignInterceptor implements HandlerInterceptor {
 
 		//校验时间戳加随机数，防止重放攻击
 
-		//解密aes秘钥
-		byte[] aesKeyByte = RSAUtil.decrypt(Base64Util.decode(encryptedAesKey), secretKeyConfig.getPrivateKey());
-		String aesKey = new String(aesKeyByte, StandardCharsets.UTF_8);
-		request.setAttribute("aesKey",aesKey);
 		//验证签名
-		boolean right = SignUtil.verifySign(aesKey,timestamp, nonce, request);
+		boolean right = SignUtil.verifySign(secretKeyConfig.getPrivateKey(), timestamp, nonce, requestWrapper);
 		if (right) {
 			return true;
 		}

@@ -1,13 +1,15 @@
 package com.fxg.util;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fxg.filter.RequestWrapper;
 import org.springframework.util.StringUtils;
 
-import javax.servlet.http.HttpServletRequest;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Enumeration;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -53,19 +55,25 @@ public class SignUtil {
 	/**
 	 * 请求参数签名验证
 	 *
-	 * @param aesKey aes秘钥
+	 * @param aesKey    aes秘钥
 	 * @param timestamp 时间戳
 	 * @param nonce     随机数
 	 * @param request   HttpServletRequest
 	 * @return true 验签成功 false 验签失败
 	 * @throws Exception
 	 */
-	public static boolean verifySign(String aesKey, String timestamp, String nonce, HttpServletRequest request)
+	public static boolean verifySign(String privateKey, String timestamp, String nonce, RequestWrapper request)
 			throws Exception {
 		TreeMap<String, String> params = new TreeMap<>();
 		params.put("timestamp", timestamp);
-		params.put("aesKey", aesKey);
 		params.put("nonce", nonce);
+
+		// 加密的aes秘钥
+		String encryptedAesKey = request.getHeader("X_EAK");//解密aes秘钥
+		byte[] aesKeyByte = RSAUtil.decrypt(Base64Util.decode(encryptedAesKey), privateKey);
+		String aesKey = new String(aesKeyByte, StandardCharsets.UTF_8);
+		params.put("aesKey", aesKey);
+		request.setAttribute("aesKey", aesKey);
 
 		//取出请求头中的签名
 		String signStr = request.getHeader("X_SIGN");
@@ -78,6 +86,11 @@ public class SignUtil {
 			String paramName = enu.nextElement().trim();
 			params.put(paramName, URLDecoder.decode(request.getParameter(paramName), "UTF-8"));
 		}
+
+		//读取body中的参数存入 treeMap
+		String bodyString = request.getBody();
+		HashMap<String, String> bodyMap = JsonUtils.convertJsonStringToHashMap(bodyString);
+		params.putAll(bodyMap);
 		//验证签名
 		if (sign(params).equals(signStr)) {
 			return true;
@@ -91,6 +104,7 @@ public class SignUtil {
 		params.put("aesKey", "ceshi");
 		params.put("nonce", "123");
 		params.put("name", "xiaohuihuii");
+		params.put("nickName", "小灰灰");
 		String sign = sign(params);
 		System.out.println(sign);
 	}
