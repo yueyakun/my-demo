@@ -56,7 +56,7 @@ public class SignInterceptor implements HandlerInterceptor {
 		String aesKey = new String(aesKeyByte, StandardCharsets.UTF_8);
 		request.setAttribute("aesKey",aesKey);
 		//验证签名
-		boolean right = SignUtil.verifySign(timestamp, nonce, request);
+		boolean right = SignUtil.verifySign(aesKey,timestamp, nonce, request);
 		if (right) {
 			return true;
 		}

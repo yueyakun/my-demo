@@ -53,15 +53,18 @@ public class SignUtil {
 	/**
 	 * 请求参数签名验证
 	 *
+	 * @param aesKey aes秘钥
 	 * @param timestamp 时间戳
-	 * @param nonce 随机数
-	 * @param request HttpServletRequest
+	 * @param nonce     随机数
+	 * @param request   HttpServletRequest
 	 * @return true 验签成功 false 验签失败
 	 * @throws Exception
 	 */
-	public static boolean verifySign(String timestamp, String nonce, HttpServletRequest request) throws Exception {
+	public static boolean verifySign(String aesKey, String timestamp, String nonce, HttpServletRequest request)
+			throws Exception {
 		TreeMap<String, String> params = new TreeMap<>();
 		params.put("timestamp", timestamp);
+		params.put("aesKey", aesKey);
 		params.put("nonce", nonce);
 
 		//取出请求头中的签名

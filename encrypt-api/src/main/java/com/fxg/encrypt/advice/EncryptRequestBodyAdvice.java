@@ -15,10 +15,6 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Type;
 import java.util.Objects;
 
-/**
- * Author:Bobby
- * DateTime:2019/4/9
- **/
 @ControllerAdvice
 public class EncryptRequestBodyAdvice implements RequestBodyAdvice {
 

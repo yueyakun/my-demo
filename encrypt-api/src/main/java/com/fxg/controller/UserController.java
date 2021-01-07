@@ -23,6 +23,7 @@ public class UserController {
 	 * 查询初始化记录
 	 */
 	@Encrypt
+	@Decrypt(required = true)
 	@PostMapping(value = "/selectByName")
 	public HttpResult<User> selectByName(@RequestParam String name) {
 		User user = new User();

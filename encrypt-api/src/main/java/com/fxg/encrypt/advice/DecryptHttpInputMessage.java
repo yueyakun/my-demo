@@ -17,10 +17,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.stream.Collectors;
 
-/**
- * Author:Bobby
- * DateTime:2019/4/9
- **/
 public class DecryptHttpInputMessage implements HttpInputMessage {
 
     private Logger log = LoggerFactory.getLogger(this.getClass());
@@ -55,7 +51,6 @@ public class DecryptHttpInputMessage implements HttpInputMessage {
         } else {
             StringBuilder json = new StringBuilder();
             content = content.replaceAll(" ", "+");
-
             if (!StringUtils.isEmpty(content)) {
                 String[] contents = content.split("\\|");
                 for (String value : contents) {
