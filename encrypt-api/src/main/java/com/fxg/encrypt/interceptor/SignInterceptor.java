@@ -2,6 +2,7 @@ package com.fxg.encrypt.interceptor;
 
 import com.fxg.api.HttpStatus;
 import com.fxg.configs.SecretKeyConfig;
+import com.fxg.util.Base64Util;
 import com.fxg.util.SignUtil;
 import com.fxg.util.RSAUtil;
 import org.slf4j.Logger;
@@ -51,10 +52,11 @@ public class SignInterceptor implements HandlerInterceptor {
 		//校验时间戳加随机数，防止重放攻击
 
 		//解密aes秘钥
-		byte[] aesKey = RSAUtil.decrypt(encryptedAesKey.getBytes(StandardCharsets.UTF_8),
-				secretKeyConfig.getPrivateKey());
+		byte[] aesKeyByte = RSAUtil.decrypt(Base64Util.decode(encryptedAesKey), secretKeyConfig.getPrivateKey());
+		String aesKey = new String(aesKeyByte, StandardCharsets.UTF_8);
+		request.setAttribute("aesKey",aesKey);
 		//验证签名
-		boolean right = SignUtil.verifySign(new String(aesKey, StandardCharsets.UTF_8), timestamp, nonce, request);
+		boolean right = SignUtil.verifySign(timestamp, nonce, request);
 		if (right) {
 			return true;
 		}
