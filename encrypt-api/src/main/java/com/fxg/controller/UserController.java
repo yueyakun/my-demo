@@ -25,7 +25,7 @@ public class UserController {
 	@Encrypt
 	@Decrypt(required = true)
 	@PostMapping(value = "/selectByName")
-	public HttpResult<User> selectByName(@RequestParam String name) {
+	public HttpResult<User> selectByName(@RequestParam String name,@RequestBody User data) {
 		User user = new User();
 		user.setId(1);
 		user.setNickName("小灰灰");

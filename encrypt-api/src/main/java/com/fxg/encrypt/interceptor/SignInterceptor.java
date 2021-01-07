@@ -3,8 +3,6 @@ package com.fxg.encrypt.interceptor;
 import com.fxg.api.HttpStatus;
 import com.fxg.configs.SecretKeyConfig;
 import com.fxg.filter.RequestWrapper;
-import com.fxg.util.Base64Util;
-import com.fxg.util.RSAUtil;
 import com.fxg.util.SignUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,7 +13,6 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.nio.charset.StandardCharsets;
 
 public class SignInterceptor implements HandlerInterceptor {
 
@@ -74,6 +71,5 @@ public class SignInterceptor implements HandlerInterceptor {
 	@Override
 	public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex)
 			throws Exception {
-
 	}
 }

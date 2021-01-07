@@ -2,6 +2,7 @@ package com.fxg.encrypt.advice;
 
 import com.fxg.configs.SecretKeyConfig;
 import com.fxg.encrypt.annotation.Decrypt;
+import com.fxg.encrypt.interceptor.AESKeyHandler;
 import com.fxg.util.Base64Util;
 import com.fxg.util.JsonUtils;
 import com.fxg.util.RSAUtil;
@@ -19,12 +20,15 @@ import java.util.stream.Collectors;
 
 public class DecryptHttpInputMessage implements HttpInputMessage {
 
+
     private Logger log = LoggerFactory.getLogger(this.getClass());
     private HttpHeaders headers;
     private InputStream body;
 
 
     public DecryptHttpInputMessage(HttpInputMessage inputMessage, SecretKeyConfig secretKeyConfig, Decrypt decrypt) throws Exception {
+
+		log.info("接收到aesKey:{}", AESKeyHandler.get());
 
         String privateKey =  secretKeyConfig.getPrivateKey();
         String charset = secretKeyConfig.getCharset();
@@ -44,7 +48,7 @@ public class DecryptHttpInputMessage implements HttpInputMessage {
             // 必须加密
             if (decrypt.required()) {
                 log.error("not support unencrypted content:{}", content);
-                throw new RuntimeException("not support unencrypted content");
+//                throw new RuntimeException("not support unencrypted content");
             }
             log.info("Unencrypted without decryption:{}", content);
             decryptBody = content;

@@ -3,6 +3,7 @@ package com.fxg.encrypt.advice;
 import com.fxg.api.HttpResult;
 import com.fxg.configs.SecretKeyConfig;
 import com.fxg.encrypt.annotation.Encrypt;
+import com.fxg.encrypt.interceptor.AESKeyHandler;
 import com.fxg.util.Base64Util;
 import com.fxg.util.JsonUtils;
 import com.fxg.util.RSAUtil;
@@ -23,6 +24,7 @@ import java.util.Objects;
 
 @ControllerAdvice
 public class EncryptResponseBodyAdvice implements ResponseBodyAdvice<HttpResult<Object>> {
+
 
 	private Logger log = LoggerFactory.getLogger(this.getClass());
 
@@ -47,10 +49,11 @@ public class EncryptResponseBodyAdvice implements ResponseBodyAdvice<HttpResult<
 	public HttpResult<Object> beforeBodyWrite(HttpResult<Object> body, MethodParameter returnType,
 			MediaType selectedContentType, Class<? extends HttpMessageConverter<?>> selectedConverterType,
 			ServerHttpRequest request, ServerHttpResponse response) {
-		// EncryptResponseBodyAdvice.setEncryptStatus(false);
-		// Dynamic Settings Not Encrypted
+
+		log.info("接收到aesKey:{}", AESKeyHandler.get());
+
 		Boolean status = encryptLocal.get();
-		if (null != status && !status) {
+		if (null != status && !status) {// TODO: 2021/1/7
 			encryptLocal.remove();
 			return body;
 		}
