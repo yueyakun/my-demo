@@ -12,4 +12,8 @@ public class AESKeyHandler {
 	public static void set(String aesKey) {
 		threadLocal.set(aesKey);
 	}
+
+	public static void remove() {
+		threadLocal.remove();
+	}
 }
