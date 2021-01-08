@@ -2,7 +2,6 @@ package com.fxg.util;
 
 import javax.crypto.Cipher;
 import java.io.ByteArrayOutputStream;
-import java.nio.charset.StandardCharsets;
 import java.security.Key;
 import java.security.KeyFactory;
 import java.security.spec.PKCS8EncodedKeySpec;
@@ -110,16 +109,16 @@ public class RSAUtil {
 
 		String aesKey = "ceshi";
 
-		System.out.println("aesKey:"+aesKey);
+		System.out.println("aesKey:" + aesKey);
 		try {
 			byte[] encrypt = encrypt(aesKey.getBytes(), pubKey);
 			String encryptAesKey = Base64Util.encode(encrypt);
-			System.out.println("encryptAesKey:"+ encryptAesKey);
-//			System.out.println("encryptAesKey:"+ new String(Base64Util.decode(encryptAesKey.replace("\\r","").replace("\\n",""))));
+			System.out.println("encryptAesKey:" + encryptAesKey);
+			//			System.out.println("encryptAesKey:"+ new String(Base64Util.decode(encryptAesKey.replace("\\r","").replace("\\n",""))));
 			byte[] decrypt = decrypt(Base64Util.decode(encryptAesKey), priKey);
 			String decryptAesKey = new String(decrypt);
-			System.out.println("decryptAesKey:"+ decryptAesKey);
-		}catch (Exception e){
+			System.out.println("decryptAesKey:" + decryptAesKey);
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}

@@ -16,6 +16,7 @@ import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.util.stream.Collectors;
 
 public class DecryptHttpInputMessage implements HttpInputMessage {
@@ -31,9 +32,7 @@ public class DecryptHttpInputMessage implements HttpInputMessage {
 		log.info("接收到aesKey:{}", AESKeyHandler.get());
 
         String privateKey =  secretKeyConfig.getPrivateKey();
-        String charset = secretKeyConfig.getCharset();
         boolean showLog = secretKeyConfig.isShowLog();
-        boolean timestampCheck = secretKeyConfig.isTimestampCheck();
 
         if (StringUtils.isEmpty(privateKey)) {
             throw new IllegalArgumentException("privateKey is null");
@@ -58,7 +57,7 @@ public class DecryptHttpInputMessage implements HttpInputMessage {
             if (!StringUtils.isEmpty(content)) {
                 String[] contents = content.split("\\|");
                 for (String value : contents) {
-                    value = new String(RSAUtil.decrypt(Base64Util.decode(value), privateKey), charset);
+                    value = new String(RSAUtil.decrypt(Base64Util.decode(value), privateKey), StandardCharsets.UTF_8);
                     json.append(value);
                 }
             }
@@ -69,16 +68,16 @@ public class DecryptHttpInputMessage implements HttpInputMessage {
         }
 
         // 开启时间戳检查
-        if (timestampCheck) {
-            // 容忍最小请求时间
-            long toleranceTime = System.currentTimeMillis() - decrypt.timeout();
-            long requestTime = JsonUtils.getNode(decryptBody, "timestamp").asLong();
-            // 如果请求时间小于最小容忍请求时间, 判定为超时
-            if (requestTime < toleranceTime) {
-                log.error("Encryption request has timed out, toleranceTime:{}, requestTime:{}, After decryption：{}", toleranceTime, requestTime, decryptBody);
-                throw new RuntimeException("request timeout");
-            }
-        }
+//        if (timestampCheck) {
+//            // 容忍最小请求时间
+//            long toleranceTime = System.currentTimeMillis() - decrypt.timeout();
+//            long requestTime = JsonUtils.getNode(decryptBody, "timestamp").asLong();
+//            // 如果请求时间小于最小容忍请求时间, 判定为超时
+//            if (requestTime < toleranceTime) {
+//                log.error("Encryption request has timed out, toleranceTime:{}, requestTime:{}, After decryption：{}", toleranceTime, requestTime, decryptBody);
+//                throw new RuntimeException("request timeout");
+//            }
+//        }
 
         this.body = new ByteArrayInputStream(decryptBody.getBytes());
     }

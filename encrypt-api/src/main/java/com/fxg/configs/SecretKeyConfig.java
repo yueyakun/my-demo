@@ -5,26 +5,20 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Configuration;
 
 //@Configuration
-@ConfigurationProperties(prefix = "rsa.encrypt")
+@ConfigurationProperties(prefix = "api.security")
 public class SecretKeyConfig {
 
-    private String privateKey;
-
     private String publicKey;
-
-    private String charset = "UTF-8";
-
+	//API加解密、签名验证、重放验证 整体开关
     private boolean open = true;
-
+	//RSS私钥
+    private String privateKey;
+    //是否开启签名验证
+    private boolean checkSign = true;
+    //是否开启重放验证
+    private boolean checkReplay = true;
+    //是否打印加解密log
     private boolean showLog = true;
-
-    private boolean preventReplay = true;
-
-    /**
-     * 请求数据时间戳校验时间差
-     * 超过指定时间的数据认定为伪造
-     */
-    private boolean timestampCheck = false;// TODO: 2021/1/6 删除
 
     public String getPrivateKey() {
         return privateKey;
@@ -40,14 +34,6 @@ public class SecretKeyConfig {
 
     public void setPublicKey(String publicKey) {
         this.publicKey = publicKey;
-    }
-
-    public String getCharset() {
-        return charset;
-    }
-
-    public void setCharset(String charset) {
-        this.charset = charset;
     }
 
     public boolean isOpen() {
@@ -66,19 +52,19 @@ public class SecretKeyConfig {
         this.showLog = showLog;
     }
 
-    public boolean isTimestampCheck() {
-        return timestampCheck;
-    }
-
-    public void setTimestampCheck(boolean timestampCheck) {
-        this.timestampCheck = timestampCheck;
-    }
-
-	public boolean isPreventReplay() {
-		return preventReplay;
+	public boolean isCheckSign() {
+		return checkSign;
 	}
 
-	public void setPreventReplay(boolean preventReplay) {
-		this.preventReplay = preventReplay;
+	public void setCheckSign(boolean checkSign) {
+		this.checkSign = checkSign;
+	}
+
+	public boolean isCheckReplay() {
+		return checkReplay;
+	}
+
+	public void setCheckReplay(boolean checkReplay) {
+		this.checkReplay = checkReplay;
 	}
 }

@@ -33,8 +33,6 @@ public class EncryptResponseBodyAdvice implements ResponseBodyAdvice<HttpResult<
 	@Autowired
 	private SecretKeyConfig secretKeyConfig;
 
-	private static ThreadLocal<Boolean> encryptLocal = new ThreadLocal<>();
-
 	@Override
 	public boolean supports(MethodParameter returnType, Class<? extends HttpMessageConverter<?>> converterType) {
 		Method method = returnType.getMethod();
@@ -52,11 +50,6 @@ public class EncryptResponseBodyAdvice implements ResponseBodyAdvice<HttpResult<
 
 		log.info("接收到aesKey:{}", AESKeyHandler.get());
 
-		Boolean status = encryptLocal.get();
-		if (null != status && !status) {// TODO: 2021/1/7
-			encryptLocal.remove();
-			return body;
-		}
 		if (encrypt) {
 			HttpResult<Object> result = encryptBody(body);
 			if (result != null)

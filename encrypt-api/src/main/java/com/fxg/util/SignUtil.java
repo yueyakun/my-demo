@@ -16,9 +16,6 @@ public class SignUtil {
 
 	private static String MD5 = "MD5";
 
-	/**
-	 * ThreadLocal 用来向后面的RequestBodyAdvice传递解密的aesKey
-	 */
 
 	public static String md5(String string) {
 		byte[] hash;
