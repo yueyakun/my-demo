@@ -4,6 +4,7 @@ import org.apache.commons.codec.binary.Base64;
 
 import javax.crypto.Cipher;
 import javax.crypto.spec.SecretKeySpec;
+import java.nio.charset.StandardCharsets;
 import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -23,21 +24,18 @@ public class AESUtil {
 	 * @param appKey  加密appKey
 	 * @return 返回Base64转码后的加密数据
 	 */
-	public static String encrypt(String content, String appKey) {
-		try {
-			Cipher cipher = Cipher.getInstance(DEFAULT_CIPHER_ALGORITHM);// 创建密码器
+	public static String encrypt(String content, String appKey) throws Exception {
 
-			byte[] byteContent = content.getBytes("utf-8");
+		Cipher cipher = Cipher.getInstance(DEFAULT_CIPHER_ALGORITHM);// 创建密码器
 
-			cipher.init(Cipher.ENCRYPT_MODE, new SecretKeySpec(appKey.getBytes(), KEY_ALGORITHM));// 初始化为加密模式的密码器
+		byte[] byteContent = content.getBytes(StandardCharsets.UTF_8);
 
-			byte[] result = cipher.doFinal(byteContent);// 加密
+		cipher.init(Cipher.ENCRYPT_MODE, new SecretKeySpec(appKey.getBytes(), KEY_ALGORITHM));// 初始化为加密模式的密码器
 
-			return Base64.encodeBase64String(result);// 通过Base64转码返回
-		} catch (Exception ex) {
-			ex.printStackTrace();
-		}
-		return null;
+		byte[] result = cipher.doFinal(byteContent);// 加密
+
+		return Base64Util.encode(result);// 通过Base64转码返回
+
 	}
 
 	/**
@@ -56,9 +54,9 @@ public class AESUtil {
 			cipher.init(Cipher.DECRYPT_MODE, new SecretKeySpec(appKey.getBytes(), KEY_ALGORITHM));
 
 			// 执行操作
-			byte[] result = cipher.doFinal(Base64.decodeBase64(content));
+			byte[] result = cipher.doFinal(Base64Util.decode(content));
 
-			return new String(result, "utf-8");
+			return new String(result, StandardCharsets.UTF_8);
 		} catch (Exception ex) {
 			Logger.getLogger(AESUtil.class.getName()).log(Level.SEVERE, null, ex);
 		}
@@ -67,16 +65,17 @@ public class AESUtil {
 	}
 
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws Exception {
 		String aesKey = "VuL0fSCfWeQzl7yUcYasqhOLlO80M365";
 
-		String userNo = "111";
+		String userNo = "{'nic':'aaaa'}";
 		System.out.println("未加密的身份证号码userNo: " + userNo);
 		String encryptUserNo = AESUtil.encrypt(userNo, aesKey);
 		System.out.println("加密的身份证号码userNo: " + encryptUserNo);
 		System.out.println("加密的身份证号码userNo: " + AESUtil.encrypt(userNo, aesKey));
 
 		String decryptUserNo = AESUtil.decrypt(encryptUserNo, aesKey);
+
 		System.out.println("解密的身份证号码userNo: " + decryptUserNo);
 
 		System.out.println(UUID.randomUUID().toString());

@@ -3,9 +3,7 @@ package com.fxg.encrypt.advice;
 import com.fxg.configs.SecretKeyConfig;
 import com.fxg.encrypt.annotation.Decrypt;
 import com.fxg.encrypt.interceptor.AESKeyHandler;
-import com.fxg.util.Base64Util;
-import com.fxg.util.JsonUtils;
-import com.fxg.util.RSAUtil;
+import com.fxg.util.AESUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
@@ -16,79 +14,72 @@ import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.nio.charset.StandardCharsets;
 import java.util.stream.Collectors;
 
 public class DecryptHttpInputMessage implements HttpInputMessage {
 
 
-    private Logger log = LoggerFactory.getLogger(this.getClass());
-    private HttpHeaders headers;
-    private InputStream body;
+	private Logger logger = LoggerFactory.getLogger(this.getClass());
+	private HttpHeaders headers;
+	private InputStream body;
 
 
-    public DecryptHttpInputMessage(HttpInputMessage inputMessage, SecretKeyConfig secretKeyConfig, Decrypt decrypt) throws Exception {
+	public DecryptHttpInputMessage(HttpInputMessage inputMessage, SecretKeyConfig secretKeyConfig, Decrypt decrypt)
+			throws Exception {
 
-		log.info("接收到aesKey:{}", AESKeyHandler.get());
+		String aesKey = AESKeyHandler.get();
+		logger.info("接收到aesKey:{}", aesKey);
 
-        String privateKey =  secretKeyConfig.getPrivateKey();
-        boolean showLog = secretKeyConfig.isShowLog();
+		boolean showLog = secretKeyConfig.isShowLog();
 
-        if (StringUtils.isEmpty(privateKey)) {
-            throw new IllegalArgumentException("privateKey is null");
-        }
+		if (StringUtils.isEmpty(aesKey)) {
+			throw new IllegalArgumentException("aesKey is null");
+		}
 
-        this.headers = inputMessage.getHeaders();
-        String content = new BufferedReader(new InputStreamReader(inputMessage.getBody()))
-                .lines().collect(Collectors.joining(System.lineSeparator()));
-        String decryptBody;
-        // 未加密内容
-        if (content.startsWith("{")) {
-            // 必须加密
-            if (decrypt.required()) {
-                log.error("not support unencrypted content:{}", content);
-//                throw new RuntimeException("not support unencrypted content");
-            }
-            log.info("Unencrypted without decryption:{}", content);
-            decryptBody = content;
-        } else {
-            StringBuilder json = new StringBuilder();
-            content = content.replaceAll(" ", "+");
-            if (!StringUtils.isEmpty(content)) {
-                String[] contents = content.split("\\|");
-                for (String value : contents) {
-                    value = new String(RSAUtil.decrypt(Base64Util.decode(value), privateKey), StandardCharsets.UTF_8);
-                    json.append(value);
-                }
-            }
-            decryptBody = json.toString();
-            if(showLog) {
-                log.info("Encrypted data received：{},After decryption：{}", content, decryptBody);
-            }
-        }
+		this.headers = inputMessage.getHeaders();
+		String content = new BufferedReader(new InputStreamReader(inputMessage.getBody())).lines()
+				.collect(Collectors.joining(System.lineSeparator()));
 
-        // 开启时间戳检查
-//        if (timestampCheck) {
-//            // 容忍最小请求时间
-//            long toleranceTime = System.currentTimeMillis() - decrypt.timeout();
-//            long requestTime = JsonUtils.getNode(decryptBody, "timestamp").asLong();
-//            // 如果请求时间小于最小容忍请求时间, 判定为超时
-//            if (requestTime < toleranceTime) {
-//                log.error("Encryption request has timed out, toleranceTime:{}, requestTime:{}, After decryption：{}", toleranceTime, requestTime, decryptBody);
-//                throw new RuntimeException("request timeout");
-//            }
-//        }
+		if (showLog) {
+			logger.info("Encrypted data received：{}", content);
+		}
 
-        this.body = new ByteArrayInputStream(decryptBody.getBytes());
-    }
+		String decryptBody;
+		// 如果未加密
+		if (content.startsWith("{")) {
+			// 必须加密
+			if (decrypt.required()) {
+				logger.error("not support unencrypted content:{}", content);
+				throw new RuntimeException("not support unencrypted content");
+			}
+			logger.info("Unencrypted without decryption:{}", content);
+			decryptBody = content;
+		} else {
+			StringBuilder json = new StringBuilder();
+			content = content.replaceAll(" ", "+");
+			if (!StringUtils.isEmpty(content)) {
+				String[] contents = content.split("\\|");
+				for (String value : contents) {
+					value = AESUtil.decrypt(value, aesKey);
+					json.append(value);
+				}
+			}
+			decryptBody = json.toString();
+			if (showLog) {
+				logger.info("After decryption：{}", decryptBody);
+			}
+		}
 
-    @Override
-    public InputStream getBody(){
-        return body;
-    }
+		this.body = new ByteArrayInputStream(decryptBody.getBytes());
+	}
 
-    @Override
-    public HttpHeaders getHeaders() {
-        return headers;
-    }
+	@Override
+	public InputStream getBody() {
+		return body;
+	}
+
+	@Override
+	public HttpHeaders getHeaders() {
+		return headers;
+	}
 }

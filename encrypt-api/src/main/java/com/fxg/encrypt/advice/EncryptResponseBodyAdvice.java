@@ -4,9 +4,8 @@ import com.fxg.api.HttpResult;
 import com.fxg.configs.SecretKeyConfig;
 import com.fxg.encrypt.annotation.Encrypt;
 import com.fxg.encrypt.interceptor.AESKeyHandler;
-import com.fxg.util.Base64Util;
+import com.fxg.util.AESUtil;
 import com.fxg.util.JsonUtils;
-import com.fxg.util.RSAUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,19 +27,17 @@ public class EncryptResponseBodyAdvice implements ResponseBodyAdvice<HttpResult<
 
 	private Logger log = LoggerFactory.getLogger(this.getClass());
 
-	private boolean encrypt;
-
 	@Autowired
 	private SecretKeyConfig secretKeyConfig;
 
 	@Override
 	public boolean supports(MethodParameter returnType, Class<? extends HttpMessageConverter<?>> converterType) {
 		Method method = returnType.getMethod();
-		if (Objects.isNull(method)) {
-			return encrypt;
+		//解密 body 的前提是：method有 Encrypt 注解且开关打开
+		if (Objects.nonNull(method) && method.isAnnotationPresent(Encrypt.class) && secretKeyConfig.isOpen()) {
+			return true;
 		}
-		encrypt = method.isAnnotationPresent(Encrypt.class) && secretKeyConfig.isOpen();
-		return encrypt;
+		return false;
 	}
 
 	@Override
@@ -48,33 +45,31 @@ public class EncryptResponseBodyAdvice implements ResponseBodyAdvice<HttpResult<
 			MediaType selectedContentType, Class<? extends HttpMessageConverter<?>> selectedConverterType,
 			ServerHttpRequest request, ServerHttpResponse response) {
 
-		log.info("接收到aesKey:{}", AESKeyHandler.get());
-
-		if (encrypt) {
-			HttpResult<Object> result = encryptBody(body);
-			if (result != null)
-				return result;
-		}
+		HttpResult<Object> result = encryptBody(body);
+		if (result != null)
+			return result;
 
 		return body;
 	}
 
 	private HttpResult<Object> encryptBody(HttpResult<Object> body) {
 
-		String publicKey = secretKeyConfig.getPublicKey();
+		String aesKey = AESKeyHandler.get();
+		log.info("接收到aesKey:{}", aesKey);
+
 		try {
 			//取出data
 			Object data = body.getData();
-			// TODO: 2021/1/4 设置加密标志
 			String content = JsonUtils.writeValueAsString(data);
-			if (!StringUtils.hasText(publicKey)) {
-				throw new NullPointerException("Please configure rsa.encrypt.privateKey parameter!");
-			}
-			byte[] ByteData = content.getBytes();
-			byte[] encodedData = RSAUtil.encrypt(ByteData, publicKey);
-			String result = Base64Util.encode(encodedData);
 			if (secretKeyConfig.isShowLog()) {
-				log.info("Pre-encrypted data：{}，After encryption：{}", content, result);
+				log.info("Pre-encrypted data：{}", content);
+			}
+			if (!StringUtils.hasText(aesKey)) {
+				throw new RuntimeException("AES_KEY IS EMPTY!");
+			}
+			String result = AESUtil.encrypt(content, aesKey);
+			if (secretKeyConfig.isShowLog()) {
+				log.info("After encryption：{}", result);
 			}
 			body.setData(result);
 			return body;

@@ -8,9 +8,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.Map;
 
-// TODO: 2021/1/4 修改成fastjson 实现
 public class JsonUtils {
 
 	private JsonUtils() {
@@ -33,9 +31,9 @@ public class JsonUtils {
 		return OBJECT_MAPPER.writeValueAsString(body);
 	}
 
-	public static HashMap<String,String> convertJsonStringToHashMap(String bodyString) throws JsonProcessingException {
+	public static HashMap<String, String> convertJsonStringToHashMap(String bodyString) throws JsonProcessingException {
 		TypeReference<HashMap<String, String>> typeRef = new TypeReference<HashMap<String, String>>() {
 		};
-		return OBJECT_MAPPER.readValue(bodyString,typeRef);
+		return OBJECT_MAPPER.readValue(bodyString, typeRef);
 	}
 }

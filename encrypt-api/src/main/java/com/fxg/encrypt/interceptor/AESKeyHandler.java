@@ -5,18 +5,17 @@ package com.fxg.encrypt.interceptor;
  */
 public class AESKeyHandler {
 
-	private static ThreadLocal<String> threadLocal = new ThreadLocal<>();
-
+	private static ThreadLocal<String> aesKeyThreadLocal = new ThreadLocal<>();
 
 	public static String get() {
-		return threadLocal.get();
+		return aesKeyThreadLocal.get();
 	}
 
 	public static void set(String aesKey) {
-		threadLocal.set(aesKey);
+		aesKeyThreadLocal.set(aesKey);
 	}
 
 	public static void remove() {
-		threadLocal.remove();
+		aesKeyThreadLocal.remove();
 	}
 }

@@ -23,6 +23,7 @@ import java.util.List;
 @Configuration("default-fxg-web-config")
 public class WebConfig implements WebMvcConfigurer {
 
+	// TODO: 2021/1/8 改成jackson？
 	/**
 	 * 配置 fastjson 为 json 转换器
 	 *
