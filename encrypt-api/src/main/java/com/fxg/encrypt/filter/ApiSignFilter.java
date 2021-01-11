@@ -1,4 +1,4 @@
-package com.fxg.filter;
+package com.fxg.encrypt.filter;
 
 import org.springframework.stereotype.Component;
 

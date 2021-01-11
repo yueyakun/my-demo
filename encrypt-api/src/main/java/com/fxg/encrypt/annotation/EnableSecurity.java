@@ -1,6 +1,6 @@
 package com.fxg.encrypt.annotation;
 
-import com.fxg.configs.SecretKeyConfig;
+import com.fxg.encrypt.SecretKeyConfig;
 import com.fxg.encrypt.advice.EncryptRequestBodyAdvice;
 import com.fxg.encrypt.advice.EncryptResponseBodyAdvice;
 import org.springframework.context.annotation.Import;

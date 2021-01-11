@@ -1,6 +1,6 @@
 package com.fxg.encrypt.advice;
 
-import com.fxg.configs.SecretKeyConfig;
+import com.fxg.encrypt.SecretKeyConfig;
 import com.fxg.encrypt.annotation.Decrypt;
 import com.fxg.encrypt.interceptor.AESKeyHandler;
 import org.slf4j.Logger;

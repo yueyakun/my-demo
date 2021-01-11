@@ -1,4 +1,4 @@
-package com.fxg.configs;
+package com.fxg.encrypt;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 

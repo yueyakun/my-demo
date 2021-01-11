@@ -1,4 +1,4 @@
-package com.fxg.util;
+package com.fxg.encrypt.util;
 
 import org.springframework.util.Base64Utils;
 

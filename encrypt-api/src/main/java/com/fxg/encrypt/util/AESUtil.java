@@ -1,6 +1,4 @@
-package com.fxg.util;
-
-import org.apache.commons.codec.binary.Base64;
+package com.fxg.encrypt.util;
 
 import javax.crypto.Cipher;
 import javax.crypto.spec.SecretKeySpec;

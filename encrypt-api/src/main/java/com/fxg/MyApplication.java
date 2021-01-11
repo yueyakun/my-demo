@@ -1,6 +1,6 @@
 package com.fxg;
 
-import com.fxg.configs.SecretKeyConfig;
+import com.fxg.encrypt.SecretKeyConfig;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;

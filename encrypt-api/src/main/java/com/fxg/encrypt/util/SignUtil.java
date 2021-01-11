@@ -1,7 +1,7 @@
-package com.fxg.util;
+package com.fxg.encrypt.util;
 
 import com.fxg.encrypt.interceptor.AESKeyHandler;
-import com.fxg.filter.RequestWrapper;
+import com.fxg.encrypt.filter.RequestWrapper;
 import org.springframework.util.StringUtils;
 
 import java.net.URLDecoder;
@@ -101,6 +101,7 @@ public class SignUtil {
 		TreeMap<String, String> params = new TreeMap<>();
 		params.put("timestamp", "1610333293815");
 		params.put("aesKey", "VuL0fSCfWeQzl7yUcYasqhOLlO80M365");
+		params.put("aesKey", "MwhD+cSviI5AmmWPrb4LzUcaaAhIQoJt");
 		params.put("nonce", "1610333293815");
 		params.put("name", "xiaohuihuii");
 		params.put("body", "{\"nickName\":\"小灰灰\"}");

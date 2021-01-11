@@ -1,9 +1,9 @@
 package com.fxg.encrypt.advice;
 
-import com.fxg.configs.SecretKeyConfig;
+import com.fxg.encrypt.SecretKeyConfig;
 import com.fxg.encrypt.annotation.Decrypt;
 import com.fxg.encrypt.interceptor.AESKeyHandler;
-import com.fxg.util.AESUtil;
+import com.fxg.encrypt.util.AESUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;

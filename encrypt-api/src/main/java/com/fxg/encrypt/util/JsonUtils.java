@@ -1,4 +1,4 @@
-package com.fxg.util;
+package com.fxg.encrypt.util;
 
 
 import com.fasterxml.jackson.core.JsonProcessingException;
