@@ -20,12 +20,12 @@ public class UserController {
 	private Logger logger = LoggerFactory.getLogger(this.getClass().getName());
 
 	/**
-	 * 查询初始化记录
+	 * 返回加密body
 	 */
 	@Encrypt
 	@Decrypt(required = true)
 	@PostMapping(value = "/selectByName")
-	public HttpResult<User> selectByName(@RequestParam String name,@RequestBody User data) {
+	public HttpResult<User> selectByName(@RequestParam String name, @RequestBody User data) {
 		User user = new User();
 		user.setId(1);
 		user.setNickName("小灰灰");
@@ -34,11 +34,21 @@ public class UserController {
 	}
 
 	/**
-	 * 查询初始化记录
+	 * 测试解密body
 	 */
 	@Decrypt(required = true)
 	@PostMapping(value = "/add")
 	public HttpResult<User> add(@RequestBody User user) {
+
+		logger.info(user.toString());
+		return new HttpResult<>(HttpStatus.OK, "ok", user);
+	}
+
+	/**
+	 * 普通接口
+	 */
+	@PostMapping(value = "/common")
+	public HttpResult<User> common(@RequestParam String name, @RequestBody User user) {
 
 		logger.info(user.toString());
 		return new HttpResult<>(HttpStatus.OK, "ok", user);

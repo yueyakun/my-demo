@@ -98,23 +98,23 @@ public class SignUtil {
 	}
 
 	public static void main(String[] args) {
-//		TreeMap<String, String> params = new TreeMap<>();
-//		params.put("timestamp", "123");
-//		params.put("aesKey", "ceshi");
-//		params.put("nonce", "123");
-//		params.put("name", "xiaohuihuii");
-//		params.put("body", "{\"nickName\":\"小灰灰\"}");
-//		String sign = sign(params);
-//		System.out.println(sign);
-
 		TreeMap<String, String> params = new TreeMap<>();
-		params.put("timestamp", "123");
+		params.put("timestamp", "1610333293815");
 		params.put("aesKey", "VuL0fSCfWeQzl7yUcYasqhOLlO80M365");
-		params.put("nonce", "123");
+		params.put("nonce", "1610333293815");
 		params.put("name", "xiaohuihuii");
-		params.put("body", "x3g8vB9D9fsFYdRiSCuZp7HWU5ResPiXdSXGVnjDcBveeCCT97a2WdgScafWFAnqJwzFB6fxu+mGHjv5WY/Cp5fn/0Uh7igoBmSsCI36mBI969+dA0L0aLZvkVx5y55IQXsATaMEmLIv/rjlGP6xZlVAsMDWylwLSGA1zAV9b8009xQVlSLJ+kTS9ttSB0ExOsevgkdGsIiFQYeoLx+ywduXh1b26W/QrNPmect8DgYb1fcyzrzAJlkx+Eb8rgDLuJiXbwjCYJuQKN6+RehjcSxHnMoeFQS28ex4IMIuH/c2wRWGo5NPWzHKQ174f0fK4vhFLwGvCVpIF4EGUeQhDdgibz8tWGRPkWQDIU09Nd0rBs09Mh7GYYFUXdYJHfywiMEUajPCf8ZFuvsjKYe49Q==");
+		params.put("body", "{\"nickName\":\"小灰灰\"}");
 		String sign = sign(params);
 		System.out.println(sign);
+
+//		TreeMap<String, String> params = new TreeMap<>();
+//		params.put("timestamp", "1610330447793");
+//		params.put("aesKey", "VuL0fSCfWeQzl7yUcYasqhOLlO80M365");
+//		params.put("nonce", "1610329245678");
+//		params.put("name", "xiaohuihuii");
+//		params.put("body", "x3g8vB9D9fsFYdRiSCuZp7HWU5ResPiXdSXGVnjDcBveeCCT97a2WdgScafWFAnqJwzFB6fxu+mGHjv5WY/Cp5fn/0Uh7igoBmSsCI36mBI969+dA0L0aLZvkVx5y55IQXsATaMEmLIv/rjlGP6xZlVAsMDWylwLSGA1zAV9b8009xQVlSLJ+kTS9ttSB0ExOsevgkdGsIiFQYeoLx+ywduXh1b26W/QrNPmect8DgYb1fcyzrzAJlkx+Eb8rgDLuJiXbwjCYJuQKN6+RehjcSxHnMoeFQS28ex4IMIuH/c2wRWGo5NPWzHKQ174f0fK4vhFLwGvCVpIF4EGUeQhDdgibz8tWGRPkWQDIU09Nd0rBs09Mh7GYYFUXdYJHfywiMEUajPCf8ZFuvsjKYe49Q==");
+//		String sign = sign(params);
+//		System.out.println(sign);
 	}
 
 }

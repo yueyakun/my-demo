@@ -13,8 +13,6 @@ public class SecretKeyConfig {
 	private String privateKey;
 	//是否开启签名验证
 	private boolean checkSign = true;
-	//是否开启重放验证
-	private boolean checkReplay = true;
 	//签名过期时间
 	private int timeOut = 300000;//五分钟
 	//是否打印加解密log
@@ -58,14 +56,6 @@ public class SecretKeyConfig {
 
 	public void setCheckSign(boolean checkSign) {
 		this.checkSign = checkSign;
-	}
-
-	public boolean isCheckReplay() {
-		return checkReplay;
-	}
-
-	public void setCheckReplay(boolean checkReplay) {
-		this.checkReplay = checkReplay;
 	}
 
 	public int getTimeOut() {

@@ -24,7 +24,8 @@ public class SignInterceptor implements HandlerInterceptor {
 
 	private Logger logger = LoggerFactory.getLogger(this.getClass().getName());
 
-	public static final String VERIFY_FAIL_MSG = "The request parameter signature verification failed! cause：{}";
+	public static final String VERIFY_TIMESTAMP_ERROR_MSG = "Time stamp validation failed! requestTime:{}, currentTime:{},timeOut:{}";
+	public static final String VERIFY_SIGNATURE_ERROR_MSG = "Signature verification failed!";
 
 	private static String REDIS_KEY = "trace:request:%s:%s";
 
@@ -43,38 +44,16 @@ public class SignInterceptor implements HandlerInterceptor {
 		String timestamp = request.getHeader("X_TIMESTAMP");
 		// aes随机数
 		String nonce = request.getHeader("X_NONCE");
+		// 加密的aes秘钥
+		String encryptedAesKey = request.getHeader("X_EAK");//解密aes秘钥
 
-		//时间戳和重放校验
-		if (secretKeyConfig.isCheckReplay()) {
-			// 计算时间差
-			int requestTime = Integer.parseInt(timestamp);
-			long currentTime = System.currentTimeMillis();
-			long toleranceTime = currentTime - requestTime;
-			// 如果请求时间小于最小容忍请求时间, 判定为超时
-			if (requestTime > currentTime || secretKeyConfig.getTimeOut() < toleranceTime) {
-				logger.error("request too early, requestTime:{}, currentTime:{}", requestTime, currentTime);
-				response.setStatus(HttpStatus.TOO_EARLY);
-				return false;
-			}
-			//如果timestamp和已存在,说明timeout时间内同样的报文之前请求过
-			Boolean success = redisTemplate.opsForValue()
-					.setIfAbsent(String.format(REDIS_KEY, timestamp, nonce), "", secretKeyConfig.getTimeOut(),
-							TimeUnit.MILLISECONDS);
-			if (Objects.isNull(success) || !success) {
-				response.setStatus(HttpStatus.TOO_EARLY);
-				return false;
-			}
-		}
-		if (StringUtils.isEmpty(timestamp) || StringUtils.isEmpty(nonce)) {
-			logger.warn(VERIFY_FAIL_MSG, "sing parameters are missing");
-			response.setStatus(HttpStatus.SIGN_FAILED);
-			return false;
+		/** 若开关关闭 直接返回*/
+		if (!secretKeyConfig.isOpen()){
+			return true;
 		}
 
-		// 开关关闭或者配置不验签就只解密出aesKey
-		if (!secretKeyConfig.isOpen() || !secretKeyConfig.isCheckSign()) {
-			// 加密的aes秘钥
-			String encryptedAesKey = request.getHeader("X_EAK");//解密aes秘钥
+		/** 若配置不验签 只解密出aesKey */
+		if (!secretKeyConfig.isCheckSign()&&StringUtils.hasText(encryptedAesKey)) {
 			if (!StringUtils.isEmpty(encryptedAesKey)) {
 				byte[] aesKeyByte = RSAUtil.decrypt(Base64Util.decode(encryptedAesKey),
 						secretKeyConfig.getPrivateKey());
@@ -82,6 +61,33 @@ public class SignInterceptor implements HandlerInterceptor {
 				AESKeyHandler.set(aesKey);
 			}
 			return true;
+		}
+
+		/** 下面是验签逻辑 */
+
+		//时间戳和随机数缺失直接返回
+		if (!StringUtils.hasText(timestamp) || !StringUtils.hasText(nonce)) {
+			logger.warn(VERIFY_SIGNATURE_ERROR_MSG);
+			response.setStatus(HttpStatus.ILLEGAL_TIMESTAMP);
+			return false;
+		}
+		// 计算时间差
+		long requestTime = Long.parseLong(timestamp);
+		long currentTime = System.currentTimeMillis();
+		long toleranceTime = currentTime - requestTime;
+		// 如果请求时间大于当前时间或者小于最小容忍请求时间, 判定为超时
+		if (requestTime > currentTime || secretKeyConfig.getTimeOut() < toleranceTime) {
+			logger.error(VERIFY_TIMESTAMP_ERROR_MSG, requestTime, currentTime, secretKeyConfig.getTimeOut());
+			response.setStatus(HttpStatus.ILLEGAL_TIMESTAMP);
+			return false;
+		}
+		//如果timestamp和已存在,说明timeout时间内同样的报文之前请求过
+		Boolean success = redisTemplate.opsForValue()
+				.setIfAbsent(String.format(REDIS_KEY, timestamp, nonce), "", secretKeyConfig.getTimeOut(),
+						TimeUnit.MILLISECONDS);
+		if (Objects.isNull(success) || !success) {
+			response.setStatus(HttpStatus.EXISTED_REQUET);
+			return false;
 		}
 
 		if (request instanceof RequestWrapper) {
@@ -95,7 +101,7 @@ public class SignInterceptor implements HandlerInterceptor {
 		if (right) {
 			return true;
 		}
-		logger.warn(VERIFY_FAIL_MSG);
+		logger.warn(VERIFY_SIGNATURE_ERROR_MSG);
 		response.setStatus(HttpStatus.SIGN_FAILED);
 		return false;
 	}
