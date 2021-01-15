@@ -49,8 +49,8 @@ public class DecryptHttpInputMessage implements HttpInputMessage {
 		if (content.startsWith("{")) {
 			// 必须加密
 			if (decrypt.required()) {
-				logger.error("not support unencrypted content:{}", content);
-				throw new RuntimeException("not support unencrypted content");
+				logger.error("Not support unencrypted content:{}", content);
+				throw new RuntimeException("Not support unencrypted content:" + content);
 			}
 			logger.info("Unencrypted without decryption:{}", content);
 			decryptBody = content;

@@ -17,7 +17,7 @@ import java.lang.reflect.Type;
 import java.util.Objects;
 
 @ControllerAdvice
-public class EncryptRequestBodyAdvice implements RequestBodyAdvice {
+public class DecryptRequestBodyAdvice implements RequestBodyAdvice {
 
 	private Logger log = LoggerFactory.getLogger(this.getClass());
 
