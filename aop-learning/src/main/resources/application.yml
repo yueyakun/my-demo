@@ -1,0 +1,26 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: aop-learning
+  task:
+    execution:
+      pool:
+        allow-core-thread-timeout: true
+        core-size: 3
+        max-size: 3
+        queue-capacity: 5000
+      thread-name-prefix: ASYNC-TASK-
+    scheduling:
+      pool:
+        size: 3
+      thread-name-prefix: SCHEDULING-TASK-
+
+logging:
+  level:
+    org:
+      springframework:
+        security: info
+
+
