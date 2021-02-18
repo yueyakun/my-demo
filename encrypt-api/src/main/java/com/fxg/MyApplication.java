@@ -28,7 +28,6 @@ public class MyApplication {
 		if (os.contains(WINDOWS)) {
 			// 开发环境配置文件位置，优先级比类路径下的高
 			String userDir = System.getProperty("user.home");//系统用户目录
-			//			String userDir = System.getProperty("user.dir");//项目所在目录
 			String devPath = userDir + "\\my-localhost-config-center\\encrypt-api\\application.yml";
 			devPath = devPath.replaceAll("\\\\", "/");
 			configFilesPath = String.join(",", configFilesPath, devPath);
