@@ -19,38 +19,35 @@ public class UserController {
 
 	private Logger logger = LoggerFactory.getLogger(this.getClass().getName());
 
-	/**
-	 * 返回加密body
-	 */
-	@Encrypt
-	@Decrypt(required = true)
-	@PostMapping(value = "/selectByName")
-	public HttpResult<User> selectByName(@RequestParam String name, @RequestBody User data) {
-		User user = new User();
-		user.setId(1);
-		user.setNickName("小灰灰");
-		user.setUsername("summer");
-		return new HttpResult<>(HttpStatus.OK, "ok", user);
-	}
-
-	/**
-	 * 测试解密body
-	 */
-	@Decrypt(required = true)
-	@PostMapping(value = "/add")
-	public HttpResult<User> add(@RequestBody User user) {
-
-		logger.info(user.toString());
-		return new HttpResult<>(HttpStatus.OK, "ok", user);
-	}
-
-	/**
-	 * 普通接口
-	 */
 	@PostMapping(value = "/common")
 	public HttpResult<User> common(@RequestParam String name, @RequestBody User user) {
 
 		logger.info(user.toString());
 		return new HttpResult<>(HttpStatus.OK, "ok", user);
+	}
+
+	@PostMapping("/sign")
+	public String sign(@RequestParam Integer id, @RequestBody User user) {
+		logger.info("enter sign method,id:{},user:{}", id, user);
+		return "ok";
+	}
+
+
+	@Encrypt
+	@GetMapping("/encrypt")
+	private User encrypt() {
+		User user = new User();
+		user.setNickName("encrypt");
+		logger.info("enter encrypt method,return user:{}", user);
+		return user;
+	}
+
+	@Decrypt
+	@PostMapping("/decrypt")
+	private User decrypt(@RequestBody User user) {
+		logger.info("enter decrypt method,param user:{}", user);
+		user.setId(1);
+		logger.info("enter decrypt method,return user:{}", user);
+		return user;
 	}
 }
