@@ -72,7 +72,7 @@ public-key 和 private-key 没有默认配置，可以通过网站在线生成�
 
 在 Controller 中创建一个 Post 方法：
 
-```java
+```
 	@PostMapping("/sign")
 	public String sign(@RequestParam Integer id, @RequestBody User user) {
 		logger.info("enter sign method,id:{},user:{}", id, user);
@@ -126,7 +126,7 @@ X_SIGN:6448020f50ecfbf135a34e9f8b3fa800
 
 在 Controller 中创建以下方法：
 
-```java
+```
 	@Encrypt
 	@GetMapping("/encrypt")
 	private User encrypt() {
@@ -145,7 +145,7 @@ X_SIGN:6448020f50ecfbf135a34e9f8b3fa800
 
 在 Controller 中创建以下方法：
 
-```java
+```
 	@Decrypt
 	@PostMapping("/decrypt")
 	private User decrypt(@RequestBody User user) {
