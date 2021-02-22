@@ -8,7 +8,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.*;
 
 /**
- * 需要admin或者user权限的接口统一放到这个controller里
+ * test aop-security
  */
 
 @RestController
