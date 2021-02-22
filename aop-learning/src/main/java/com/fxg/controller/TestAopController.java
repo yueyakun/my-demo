@@ -4,11 +4,12 @@ import com.fxg.annotation.ApiLog;
 import com.fxg.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- * 需要admin或者user权限的接口统一放到这个controller里
+ * test aop
  */
 
 @RestController
@@ -19,7 +20,7 @@ public class TestAopController {
 	private UserService userService;
 
 	@ApiLog
-	@GetMapping("/test1")
+	@PostMapping("/test1")
 	public String test1() {
 		System.out.println("代理public方法：test1");
 		System.out.println(userService);
