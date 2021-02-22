@@ -1,0 +1,29 @@
+server:
+  port: 8080
+
+spring:
+  redis:
+    host:
+    port:
+    password:
+  application:
+    name: test-api-security
+
+
+logging:
+  level:
+    org:
+      springframework:
+        security: info
+
+
+api:
+  security:
+    open: true
+    check-sign: true
+    timeout: 30000
+    show-log: true
+    public-key: MFwwDQYJKoZIhvcNAQEBBQADSwAwSAJBAMbFUgBEsev1lURtNFgfr0jtz4IDJ6MEyIkA2WMG57bPfSsT4Pei7bxsXUCyMTXQbaxV0SThX802gxrpTEBAbJsCAwEAAQ==
+    private-key: MIIBVAIBADANBgkqhkiG9w0BAQEFAASCAT4wggE6AgEAAkEAxsVSAESx6/WVRG00WB+vSO3PggMnowTIiQDZYwbnts99KxPg96LtvGxdQLIxNdBtrFXRJOFfzTaDGulMQEBsmwIDAQABAkEAqG6gM9YCJn5txBP9nQcMU3IgunzN45e0DlQH4aACTac6JHPTZAA1STxdgTosdDBhrC1HA2pPlRzCuCAh3MpvgQIhAOxTENdAAiQPspaFWAvGJZhN767g9LFGUVdabvf0mCC7AiEA11HZRiSpICXO2U1MrYsLrTJMHrQQvCM/mOhW4UullaECIDs/7DX7T04ZPW4tilCRYjWYPKJ8tfyII7ah7rZt9YInAiBSdJSY6OcfWXsp+hEYEDxLegxuYZRbB8COBMNoiXiCoQIgMls9U5YPlGQ3ajDUhFACFIUNpGQl8l2faxPy/yRoV6o=
+
+
