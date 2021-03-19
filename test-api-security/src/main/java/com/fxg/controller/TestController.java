@@ -35,9 +35,9 @@ public class TestController {
 
 	@Decrypt
 	@PostMapping("/decrypt")
-	private User decrypt(@RequestBody User user) {
+	private Object decrypt(@RequestBody Object user) {
 		logger.info("enter decrypt method,param user:{}", user);
-		user.setId(1);
+//		user.setId(1);
 		logger.info("enter decrypt method,return user:{}", user);
 		return user;
 	}
