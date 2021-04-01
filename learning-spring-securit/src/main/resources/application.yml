@@ -1,0 +1,54 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: archetype-service
+  datasource:
+    type: com.zaxxer.hikari.HikariDataSource
+    username:
+    password:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/fxgmall?characterEncoding=UTF8&useSSL=false
+    hikari:
+      max-lifetime: 180000
+  redis:
+    host:
+    port:
+    password:
+  task:
+    execution:
+      pool:
+        allow-core-thread-timeout: true
+        core-size: 3
+        max-size: 3
+        queue-capacity: 5000
+      thread-name-prefix: ASYNC-TASK-
+    scheduling:
+      pool:
+        size: 3
+      thread-name-prefix: SCHEDULING-TASK-
+
+#mybatis:
+#  configuration:
+#    default-enum-type-handler: com.fxg.archetype.configs.AutoEnumTypeHandler 这里配置枚举转换器会被mybatis-plus覆盖
+
+mybatis-plus:
+  mapper-locations: classpath*:mapperXML/*Mapper.xml
+  global-config:
+    db-config:
+      id-type: auto
+    banner: false
+  configuration:
+    map-underscore-to-camel-case: true
+    call-setters-on-nulls: true
+    log-impl: org.apache.ibatis.logging.slf4j.Slf4jImpl
+    default-enum-type-handler: com.fxg.archetype.configs.AutoEnumTypeHandler
+
+logging:
+  level:
+    org:
+      springframework:
+        security: info
+
+
