@@ -1,12 +1,21 @@
 package com.fxg.learning.security.domain;
 
-import com.alibaba.fastjson.annotation.JSONField;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fxg.learning.security.enums.Gender;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 /**
  * <p>
@@ -17,7 +26,9 @@ import java.time.LocalDateTime;
  * @since 2020-04-24
  */
 @TableName(value = "a1_user")
-public class User implements Serializable {
+public class User implements UserDetails,Serializable {
+
+	private Logger logger = LoggerFactory.getLogger(this.getClass().getName());
 
 	private static final long serialVersionUID = 1L;
 
@@ -80,18 +91,57 @@ public class User implements Serializable {
 	 */
 	private LocalDate birthday;
 
-	@JSONField(serialize = false)
 	private Integer version;
 
-	@JSONField(serialize = false)
 	private Boolean enabled;
 
-	@JSONField(serialize = false)
 	private Integer enabledId;
 
 	private LocalDateTime createTime;
 
 	private LocalDateTime lastTime;
+
+	@TableField(exist = false)
+	private List<Role> roles;
+
+	@JsonIgnore//jackson忽略
+	@Override
+	public Collection<? extends GrantedAuthority> getAuthorities() {
+		List<GrantedAuthority> authorities = new ArrayList<>();
+		for (Role role : roles) {
+			authorities.add(new SimpleGrantedAuthority("ROLE_" + role.getRoleName()));
+		}
+		logger.info("当前用户角色为：{}", roles);
+		return authorities;
+	}
+
+	@Override
+	public String getUsername() {
+		return this.username;
+	}
+
+	@Override
+	@JsonIgnore//jackson忽略
+	public boolean isAccountNonExpired() {
+		return enabled;
+	}
+
+	@Override
+	@JsonIgnore//jackson忽略
+	public boolean isAccountNonLocked() {
+		return true;
+	}
+
+	@Override
+	public boolean isCredentialsNonExpired() {
+		return true;
+	}
+
+	@Override
+	@JsonIgnore//jackson忽略
+	public boolean isEnabled() {
+		return this.enabled;
+	}
 
 	public Integer getId() {
 		return id;
@@ -99,10 +149,6 @@ public class User implements Serializable {
 
 	public void setId(Integer id) {
 		this.id = id;
-	}
-
-	public String getUsername() {
-		return username;
 	}
 
 	public void setUsername(String username) {
@@ -235,5 +281,13 @@ public class User implements Serializable {
 
 	public void setLastTime(LocalDateTime lastTime) {
 		this.lastTime = lastTime;
+	}
+
+	public List<Role> getRoles() {
+		return roles;
+	}
+
+	public void setRoles(List<Role> roles) {
+		this.roles = roles;
 	}
 }

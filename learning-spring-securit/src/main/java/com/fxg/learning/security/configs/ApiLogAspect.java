@@ -56,7 +56,7 @@ public class ApiLogAspect {
 					//这里不用json了，因为可能是一些特殊参数，无法序列化的，比如httprequest等
 
 					try{
-						sb.append(String.format("=param index %s : %s\n",i, JSON.toJSONString(args[i])));
+						sb.append(String.format("=param index %s : %s\n",i, objectMapper.writeValueAsString.toJSONString(args[i])));
 					}catch (Exception e){
 						sb.append(String.format("=param index %s : %s\n",i, args[i].toString()));
 					}
