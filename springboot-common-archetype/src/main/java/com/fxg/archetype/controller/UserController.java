@@ -1,7 +1,5 @@
 package com.fxg.archetype.controller;
 
-import cn.shuibo.annotation.Decrypt;
-import cn.shuibo.annotation.Encrypt;
 import com.fxg.archetype.api.HttpResult;
 import com.fxg.archetype.api.HttpStatus;
 import com.fxg.archetype.domain.User;
@@ -27,7 +25,6 @@ public class UserController {
 	/**
 	 * 查询初始化记录
 	 */
-	@Encrypt
 	@PostMapping(value = "/selectByName")
 	public HttpResult<User> selectByName(@RequestParam String name) {
 		User user = new User();
@@ -40,7 +37,6 @@ public class UserController {
 	/**
 	 * 查询初始化记录
 	 */
-	@Decrypt(required = true)
 	@PostMapping(value = "/add")
 	public HttpResult<User> add(@RequestBody User user) {
 

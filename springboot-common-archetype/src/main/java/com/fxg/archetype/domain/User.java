@@ -1,6 +1,5 @@
 package com.fxg.archetype.domain;
 
-import com.alibaba.fastjson.annotation.JSONField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.fxg.archetype.enums.Gender;
 
@@ -80,13 +79,10 @@ public class User implements Serializable {
 	 */
 	private LocalDate birthday;
 
-	@JSONField(serialize = false)
 	private Integer version;
 
-	@JSONField(serialize = false)
 	private Boolean enabled;
 
-	@JSONField(serialize = false)
 	private Integer enabledId;
 
 	private LocalDateTime createTime;
