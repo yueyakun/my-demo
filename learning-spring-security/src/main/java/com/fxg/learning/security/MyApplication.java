@@ -32,7 +32,7 @@ public class MyApplication {
 			// 开发环境配置文件位置，优先级比类路径下的高
 			String userDir = System.getProperty("user.home");//系统用户目录
 //			String userDir = System.getProperty("user.dir");//项目所在目录
-			String devPath = userDir + "\\my-localhost-config-center\\learning-spring-securit\\application.yml";
+			String devPath = userDir + "\\my-localhost-config-center\\learning-spring-security\\application.yml";
 			devPath = "file:" + devPath.substring(devPath.indexOf(":") + 1).replaceAll("\\\\", "/");
 			configFilesPath = String.join(",", configFilesPath, devPath);
 		} else {
@@ -44,5 +44,6 @@ public class MyApplication {
 		SpringApplication.run(MyApplication.class, "--spring.config.location=" + configFilesPath);
 
 	}
+
 
 }

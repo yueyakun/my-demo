@@ -10,7 +10,7 @@ import org.springframework.context.annotation.Configuration;
  * MyBatisPlus 配置类
  */
 @Configuration
-@MapperScan(value = {"org.example.mapper"})
+@MapperScan(value = {"com.fxg.learning.security.mapper"})
 public class MyBatisPlusConfiguration {
 
 	/**

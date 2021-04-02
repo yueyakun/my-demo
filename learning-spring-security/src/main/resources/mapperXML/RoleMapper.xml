@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fxg.learning.security.mapper.RoleMapper">
+
+    <!--<cache/>-->
+
+    <select id="getRolesByUserId" parameterType="java.lang.Integer" resultType="com.fxg.learning.security.domain.Role">
+        SELECT DISTINCT r.* FROM a1_user_role_mapping m LEFT JOIN a1_role r  ON r.id=m.role_id WHERE m.user_id = #{userId}
+    </select>
+
+</mapper>

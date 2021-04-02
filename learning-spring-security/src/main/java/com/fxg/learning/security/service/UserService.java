@@ -58,4 +58,16 @@ public class UserService extends ServiceImpl<UserMapper, User> implements UserDe
 	public User selectByName(@NotBlank String name) {
 		return userMapper.loadUserByUsername(name);
 	}
+
+	public static void main(String[] args) {
+		int[] mgt=new int[]{1,2,3,4,5,6,7,8,9};
+
+		int n = mgt.length;
+		int[] ints=new int[n];
+		for (int i = 0; i < n; i++) {
+			int j= (int)(0+Math.random()*n);
+//			mgt[j];
+		}
+		System.out.println(ints);
+	}
 }

@@ -4,12 +4,6 @@
 
     <!--<cache/>-->
 
-    <resultMap id="userMap" type="com.fxg.learning.security.domain.User">
-        <id column="id" jdbcType="BIGINT" property="id" />
-        <result column="gender" jdbcType="int" typeHandler="com.fxg.learning.security.configs.MyEnumTypeHandler"></result>
-    </resultMap>
-
-
     <select id="loadUserByUsername" parameterType="java.lang.String" resultType="com.fxg.learning.security.domain.User">
         select * from a1_user WHERE username = #{username}
     </select>

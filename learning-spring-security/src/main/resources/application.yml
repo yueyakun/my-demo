@@ -43,7 +43,7 @@ mybatis-plus:
     map-underscore-to-camel-case: true
     call-setters-on-nulls: true
     log-impl: org.apache.ibatis.logging.slf4j.Slf4jImpl
-    default-enum-type-handler: com.fxg.archetype.configs.AutoEnumTypeHandler
+    default-enum-type-handler: com.fxg.learning.security.configs.AutoEnumTypeHandler
 
 logging:
   level:
