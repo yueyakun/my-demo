@@ -2,8 +2,6 @@
 package com.fxg.learning.security.api;
 
 import com.fxg.learning.security.exception.ExceptionDescriptor;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -15,16 +13,12 @@ import java.util.function.Function;
 /**
  * <p> 接口应答对象,包括code:应答码,desc:应答描述,data:数据域 </p>
  */
-@ApiModel(value = "http响应对象")
 public class HttpResult<T> {
 
 	private Logger logger = LoggerFactory.getLogger(this.getClass().getName());
 
-	@ApiModelProperty(value = "响应状态码：200-成功 400-客户端参数错误 401-未登陆 403-鉴权失败 404-资源不存在 500-系统内部错 502-未知错误")
 	private Integer code;
-	@ApiModelProperty(value = "响应描述")
 	private String desc;
-	@ApiModelProperty(value = "响应数据")
 	private T data;
 
 

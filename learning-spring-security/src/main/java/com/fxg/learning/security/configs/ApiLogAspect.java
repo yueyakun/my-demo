@@ -1,13 +1,14 @@
 package com.fxg.learning.security.configs;
 
 
-import com.alibaba.fastjson.JSON;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -24,7 +25,10 @@ import java.util.UUID;
 public class ApiLogAspect {
 	private Logger logger = LoggerFactory.getLogger(ApiLogAspect.class);
 
-	@Pointcut("execution(public * org.example.controller.*Controller.*(..))")
+	@Autowired
+	private ObjectMapper objectMapper;
+
+	@Pointcut("execution(public * com.fxg.learning.security.controller.*Controller.*(..))")
 	public void controller() {
 	}
 
@@ -56,7 +60,7 @@ public class ApiLogAspect {
 					//这里不用json了，因为可能是一些特殊参数，无法序列化的，比如httprequest等
 
 					try{
-						sb.append(String.format("=param index %s : %s\n",i, objectMapper.writeValueAsString.toJSONString(args[i])));
+						sb.append(String.format("=param index %s : %s\n",i, objectMapper.writeValueAsString(args[i])));
 					}catch (Exception e){
 						sb.append(String.format("=param index %s : %s\n",i, args[i].toString()));
 					}

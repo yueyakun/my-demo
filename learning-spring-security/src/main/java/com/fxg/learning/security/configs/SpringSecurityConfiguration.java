@@ -79,10 +79,10 @@ public class SpringSecurityConfiguration extends WebSecurityConfigurerAdapter {
 				.formLogin()
 				.successHandler((httpServletRequest, httpServletResponse, authentication) -> {
 					String value = objectMapper.writeValueAsString(authentication.getPrincipal());
-					String token = tokenFactory.getOperator().add(value);
+//					String token = tokenFactory.getOperator().add(value);
 					httpServletResponse.setContentType("application/json;charset=utf-8");
 					PrintWriter out = httpServletResponse.getWriter();
-					out.write(objectMapper.writeValueAsString(new HttpResult<>(HttpStatus.OK, "登录成功", token)));
+					out.write(objectMapper.writeValueAsString(new HttpResult<>(HttpStatus.OK, "登录成功", "token")));
 					out.flush();
 					out.close();
 				})
@@ -94,6 +94,7 @@ public class SpringSecurityConfiguration extends WebSecurityConfigurerAdapter {
 					out.flush();
 					out.close();
 				})
+//				.loginPage("/login.html")
 				.loginProcessingUrl("/login")
 				.usernameParameter("username")
 				.passwordParameter("password")
@@ -106,10 +107,10 @@ public class SpringSecurityConfiguration extends WebSecurityConfigurerAdapter {
 				.clearAuthentication(true)
 				.invalidateHttpSession(true)
 				.logoutSuccessHandler((HttpServletRequest req, HttpServletResponse res, Authentication authentication) -> {
-					String token = AuthFilter.getToken(req);
-					if (!StringUtils.isEmpty(token)) {
-						tokenFactory.getOperator().invalidate(token);
-					}
+//					String token = AuthFilter.getToken(req);
+//					if (!StringUtils.isEmpty(token)) {
+//						tokenFactory.getOperator().invalidate(token);
+//					}
 					res.setContentType("application/json;charset=utf-8");
 					PrintWriter out = res.getWriter();
 					out.write(objectMapper.writeValueAsString(new HttpResult<>(HttpStatus.OK, "登出成功")));
