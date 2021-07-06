@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.fxg.learning.spring.event.mapper.UserMapperr">
+<mapper namespace="com.fxg.learning.spring.event.mapper.UserMapper">
 
     <!--<cache/>-->
 
-    <insert id="insert" parameterType="com.fxg.learning.spring.event.domain.User" useGeneratedKeys="true" keyProperty="id">
-        insert into user (name, age)
+    <insert id="insertUser" parameterType="com.fxg.learning.spring.event.domain.User" useGeneratedKeys="true" keyProperty="id">
+        insert into a1_user (name, age)
         values (#{name}, #{age})
     </insert>
-
 </mapper>

@@ -17,5 +17,6 @@ spring:
 
 
 mybatis:
-  mapper-locations: classpath:mapping/*.xml
+  mapper-locations: classpath:mapper/*.xml
+  type-aliases-package: com.fxg.learning.event.domain
 

@@ -7,6 +7,7 @@ public class UserCommitEvent extends ApplicationEvent {
 	private User user;
 	public UserCommitEvent(User user) {
 		super(user);
+		this.user = user;
 	}
 
 	@Override
