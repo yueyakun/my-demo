@@ -79,7 +79,6 @@ public class SpringSecurityConfiguration extends WebSecurityConfigurerAdapter {
 				.formLogin()
 				.successHandler((httpServletRequest, httpServletResponse, authentication) -> {
 					String value = objectMapper.writeValueAsString(authentication.getPrincipal());
-//					String token = tokenFactory.getOperator().add(value);
 					httpServletResponse.setContentType("application/json;charset=utf-8");
 					PrintWriter out = httpServletResponse.getWriter();
 					out.write(objectMapper.writeValueAsString(new HttpResult<>(HttpStatus.OK, "登录成功", "token")));
@@ -94,8 +93,8 @@ public class SpringSecurityConfiguration extends WebSecurityConfigurerAdapter {
 					out.flush();
 					out.close();
 				})
-//				.loginPage("/login.html")
-				.loginProcessingUrl("/login")
+//				.loginPage("/login.html")        //可以自定义登录页，前后分离项目不需要
+				.loginProcessingUrl("/login")    //前后分离项目登录请求地址
 				.usernameParameter("username")
 				.passwordParameter("password")
 				.permitAll()
